@@ -1,0 +1,50 @@
+import * as Sentry from '@sentry/nextjs';
+import { NextRequest } from 'next/server';
+import { insertNewUser } from '@/services/server/graphql/mutations/insertNewUser';
+import { updateCreatedAccountMetadata } from '@/services/server/supabase/rsc';
+import { response400BadRequestError, response403ForbiddenError } from '@/lib/server/rsc/http';
+
+export const runtime = 'edge';
+
+export async function POST(req: NextRequest) {
+  const payload = await req.json();
+  const { type, record, table } = payload;
+
+  console.log('event', payload, type, record?.id, record?.email);
+
+  // Get bearer token from Authorization header
+  const authHeader = req.headers.get('authorization');
+  const token = authHeader?.replace('Bearer ', '');
+
+  if (!token || token !== process.env.SUPABASE_WEBHOOK_SECRET) {
+    return response403ForbiddenError('Invalid token');
+  }
+
+  if (type === 'INSERT' && table === 'users') {
+    console.log(`Processing new user signup: ${record.email}`);
+
+    /**
+     * @todo
+     * - Create stripe user
+     * - Add to email provider
+     */
+
+    await insertNewUser({
+      id: record.id,
+      email: record.email,
+      createdAt: record.created_at,
+      updatedAt: record.updated_at,
+      stripeCustomerId: `CHANGE_ME-${Date.now()}`,
+    });
+
+    // Mark onboarding as completed
+    await updateCreatedAccountMetadata(record.id).catch((error) => {
+      Sentry.captureException(error);
+      console.error('Error updating user metadata', error);
+    });
+
+    return new Response('Onboarding completed', { status: 200 });
+  }
+
+  return response400BadRequestError('Invalid event');
+}

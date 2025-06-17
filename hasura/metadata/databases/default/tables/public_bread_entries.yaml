@@ -1,0 +1,83 @@
+table:
+  name: bread_entries
+  schema: public
+object_relationships:
+  - name: recipe
+    using:
+      foreign_key_constraint_on: recipe_id
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
+array_relationships:
+  - name: images
+    using:
+      foreign_key_constraint_on:
+        column: bread_entry_id
+        table:
+          name: bread_entry_images
+          schema: public
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - analysis
+        - archived_at
+        - cons
+        - cons_confidence
+        - created_at
+        - crumb_structure
+        - crumb_structure_confidence
+        - crumb_structure_description
+        - crust_crumb_confidence
+        - crust_crumb_description
+        - deleted_at
+        - expert_guidance
+        - expert_guidance_confidence
+        - has_large_holes_near_top
+        - has_separation
+        - has_valid_image
+        - hole_distribution_confidence
+        - hole_distribution_description
+        - id
+        - is_gummy_or_dense
+        - is_hole_distribution_even
+        - is_light_and_airy
+        - is_well_bonded
+        - message
+        - notes
+        - overall_confidence
+        - overall_score
+        - pros
+        - pros_confidence
+        - recipe_id
+        - summary
+        - texture_confidence
+        - texture_description
+        - trend_analysis
+        - updated_at
+        - user_id
+        - valid_image_confidence
+      filter:
+        _and:
+          - deleted_at:
+              _is_null: true
+          - user_id:
+              _eq: X-Hasura-User-Id
+      limit: 100
+    comment: ""
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - archived_at
+        - deleted_at
+        - notes
+        - recipe_id
+      filter:
+        _and:
+          - deleted_at:
+              _is_null: true
+          - user_id:
+              _eq: X-Hasura-User-Id
+      check: null
+    comment: ""

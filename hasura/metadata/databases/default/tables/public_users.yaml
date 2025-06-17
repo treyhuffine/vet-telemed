@@ -1,0 +1,59 @@
+table:
+  name: users
+  schema: public
+array_relationships:
+  - name: breadEntries
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: bread_entries
+          schema: public
+  - name: recipeNotes
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: recipe_notes
+          schema: public
+  - name: recipes
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: recipes
+          schema: public
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - birth_date
+        - email
+        - name
+        - stripe_customer_id
+        - created_at
+        - deleted_at
+        - updated_at
+        - id
+      filter:
+        _and:
+          - deleted_at:
+              _is_null: true
+          - id:
+              _eq: X-Hasura-User-Id
+      limit: 1
+    comment: ""
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - birth_date
+        - name
+      filter:
+        _and:
+          - deleted_at:
+              _is_null: true
+          - id:
+              _eq: X-Hasura-User-Id
+      check: null
+    comment: ""

@@ -1,0 +1,88 @@
+table:
+  name: connected_family_members
+  schema: public
+object_relationships:
+  - name: connectedFamily
+    using:
+      foreign_key_constraint_on: connected_family_id
+insert_permissions:
+  - role: user
+    permission:
+      check:
+        _and:
+          - deleted_at:
+              _is_null: true
+          - connectedFamily:
+              created_by_user_id:
+                _eq: X-Hasura-User-Id
+      columns:
+        - birth_date
+        - display_name
+        - full_name
+        - gender
+        - gender_string
+        - location_description
+        - notes
+        - relationship_description
+        - relationship_to_children
+        - relationship_to_source_family_children
+        - relationship_to_source_family_description
+    comment: ""
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - archived_at
+        - birth_date
+        - connected_family_id
+        - created_at
+        - deleted_at
+        - display_name
+        - full_name
+        - gender
+        - gender_string
+        - id
+        - location_description
+        - notes
+        - notes_ai
+        - relationship_description
+        - relationship_description_ai
+        - relationship_to_children
+        - relationship_to_source_family_children
+        - relationship_to_source_family_description
+        - updated_at
+      filter:
+        _and:
+          - deleted_at:
+              _is_null: true
+          - connectedFamily:
+              created_by_user_id:
+                _eq: X-Hasura-User-Id
+      limit: 100
+    comment: ""
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - archived_at
+        - birth_date
+        - deleted_at
+        - display_name
+        - full_name
+        - gender
+        - gender_string
+        - location_description
+        - notes
+        - relationship_description
+        - relationship_to_children
+        - relationship_to_source_family_children
+        - relationship_to_source_family_description
+      filter:
+        _and:
+          - deleted_at:
+              _is_null: true
+          - connectedFamily:
+              created_by_user_id:
+                _eq: X-Hasura-User-Id
+      check: null
+    comment: ""

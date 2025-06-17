@@ -1,0 +1,89 @@
+table:
+  name: recipes
+  schema: public
+object_relationships:
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
+array_relationships:
+  - name: breadEntries
+    using:
+      foreign_key_constraint_on:
+        column: recipe_id
+        table:
+          name: bread_entries
+          schema: public
+  - name: notes
+    using:
+      foreign_key_constraint_on:
+        column: recipe_id
+        table:
+          name: recipe_notes
+          schema: public
+insert_permissions:
+  - role: user
+    permission:
+      check:
+        user_id:
+          _eq: X-Hasura-User-Id
+      columns:
+        - flour
+        - ingredients
+        - instructions
+        - name
+        - remarks
+        - salt
+        - url
+        - user_id
+        - water
+    comment: ""
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - archived_at
+        - created_at
+        - deleted_at
+        - flour
+        - id
+        - ingredients
+        - instructions
+        - last_used_at
+        - name
+        - remarks
+        - salt
+        - updated_at
+        - url
+        - user_id
+        - water
+      filter:
+        _and:
+          - user_id:
+              _eq: X-Hasura-User-Id
+          - deleted_at:
+              _is_null: true
+      limit: 100
+    comment: ""
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - archived_at
+        - deleted_at
+        - flour
+        - ingredients
+        - instructions
+        - last_used_at
+        - name
+        - remarks
+        - salt
+        - url
+        - water
+      filter:
+        _and:
+          - user_id:
+              _eq: X-Hasura-User-Id
+          - deleted_at:
+              _is_null: true
+      check: null
+    comment: ""

@@ -1,0 +1,48 @@
+table:
+  name: bread_entry_images
+  schema: public
+object_relationships:
+  - name: breadEntry
+    using:
+      foreign_key_constraint_on: bread_entry_id
+insert_permissions:
+  - role: user
+    permission:
+      check:
+        breadEntry:
+          user_id:
+            _eq: X-Hasura-User-Id
+      columns:
+        - bread_entry_id
+        - image_name
+        - image_path
+        - image_storage_provider
+        - mime_type
+        - original_image_name
+        - size
+    comment: ""
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - archived_at
+        - bread_entry_id
+        - created_at
+        - deleted_at
+        - id
+        - image_name
+        - image_path
+        - image_storage_provider
+        - mime_type
+        - original_image_name
+        - size
+        - updated_at
+      filter:
+        _and:
+          - breadEntry:
+              user_id:
+                _eq: X-Hasura-User-Id
+          - deleted_at:
+              _is_null: true
+      limit: 20
+    comment: ""

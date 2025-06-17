@@ -1,0 +1,6074 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""whether this query should be cached (Hasura Cloud only)"""
+directive @cached(
+  """refresh the cache entry"""
+  refresh: Boolean! = false
+
+  """measured in seconds"""
+  ttl: Int! = 60
+) on QUERY
+
+"""
+Boolean expression to compare columns of type "Boolean". All fields are combined with logical 'AND'.
+"""
+input BooleanComparisonExp {
+  _eq: Boolean
+  _gt: Boolean
+  _gte: Boolean
+  _in: [Boolean!]
+  _isNull: Boolean
+  _lt: Boolean
+  _lte: Boolean
+  _neq: Boolean
+  _nin: [Boolean!]
+}
+
+"""
+columns and relationships of "bread_entries"
+"""
+type BreadEntries {
+  analysis: String!
+  archivedAt: timestamptz
+  cons: String!
+  consConfidence: numeric!
+  createdAt: timestamptz!
+  crumbStructure: String!
+  crumbStructureConfidence: numeric!
+  crumbStructureDescription: String!
+  crustCrumbConfidence: numeric!
+  crustCrumbDescription: String!
+  deletedAt: timestamptz
+  expertGuidance: String!
+  expertGuidanceConfidence: numeric!
+  hasLargeHolesNearTop: Boolean!
+  hasSeparation: Boolean!
+  hasValidImage: Boolean!
+  holeDistributionConfidence: numeric!
+  holeDistributionDescription: String!
+  id: uuid!
+
+  """An array relationship"""
+  images(
+    """distinct select on columns"""
+    distinctOn: [BreadEntryImagesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [BreadEntryImagesOrderBy!]
+
+    """filter the rows returned"""
+    where: BreadEntryImagesBoolExp
+  ): [BreadEntryImages!]!
+
+  """An aggregate relationship"""
+  imagesAggregate(
+    """distinct select on columns"""
+    distinctOn: [BreadEntryImagesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [BreadEntryImagesOrderBy!]
+
+    """filter the rows returned"""
+    where: BreadEntryImagesBoolExp
+  ): BreadEntryImagesAggregate!
+  isGummyOrDense: Boolean!
+  isHoleDistributionEven: Boolean!
+  isLightAndAiry: Boolean!
+  isWellBonded: Boolean!
+  llmCompletionTokens: Int
+  llmFrequencyPenalty: numeric
+  llmModel: String
+  llmPresencePenalty: numeric
+  llmPromptTokens: Int
+  llmTemperature: numeric
+  llmTopP: numeric
+  llmTotalTokens: Int
+  message: String!
+  notes: String!
+  overallConfidence: numeric!
+  overallScore: numeric!
+  pros: String!
+  prosConfidence: numeric!
+
+  """An object relationship"""
+  recipe: Recipes
+  recipeId: uuid
+  summary: String!
+  textureConfidence: numeric!
+  textureDescription: String!
+  trendAnalysis: String
+  updatedAt: timestamptz!
+
+  """An object relationship"""
+  user: Users!
+  userId: uuid!
+  validImageConfidence: numeric!
+}
+
+"""
+aggregated selection of "bread_entries"
+"""
+type BreadEntriesAggregate {
+  aggregate: BreadEntriesAggregateFields
+  nodes: [BreadEntries!]!
+}
+
+input BreadEntriesAggregateBoolExp {
+  bool_and: breadEntriesAggregateBoolExpBool_and
+  bool_or: breadEntriesAggregateBoolExpBool_or
+  count: breadEntriesAggregateBoolExpCount
+}
+
+"""
+aggregate fields of "bread_entries"
+"""
+type BreadEntriesAggregateFields {
+  avg: BreadEntriesAvgFields
+  count(columns: [BreadEntriesSelectColumn!], distinct: Boolean): Int!
+  max: BreadEntriesMaxFields
+  min: BreadEntriesMinFields
+  stddev: BreadEntriesStddevFields
+  stddevPop: BreadEntriesStddevPopFields
+  stddevSamp: BreadEntriesStddevSampFields
+  sum: BreadEntriesSumFields
+  varPop: BreadEntriesVarPopFields
+  varSamp: BreadEntriesVarSampFields
+  variance: BreadEntriesVarianceFields
+}
+
+"""
+order by aggregate values of table "bread_entries"
+"""
+input BreadEntriesAggregateOrderBy {
+  avg: BreadEntriesAvgOrderBy
+  count: OrderBy
+  max: BreadEntriesMaxOrderBy
+  min: BreadEntriesMinOrderBy
+  stddev: BreadEntriesStddevOrderBy
+  stddevPop: BreadEntriesStddevPopOrderBy
+  stddevSamp: BreadEntriesStddevSampOrderBy
+  sum: BreadEntriesSumOrderBy
+  varPop: BreadEntriesVarPopOrderBy
+  varSamp: BreadEntriesVarSampOrderBy
+  variance: BreadEntriesVarianceOrderBy
+}
+
+"""
+input type for inserting array relation for remote table "bread_entries"
+"""
+input BreadEntriesArrRelInsertInput {
+  data: [BreadEntriesInsertInput!]!
+
+  """upsert condition"""
+  onConflict: BreadEntriesOnConflict
+}
+
+"""aggregate avg on columns"""
+type BreadEntriesAvgFields {
+  consConfidence: Float
+  crumbStructureConfidence: Float
+  crustCrumbConfidence: Float
+  expertGuidanceConfidence: Float
+  holeDistributionConfidence: Float
+  llmCompletionTokens: Float
+  llmFrequencyPenalty: Float
+  llmPresencePenalty: Float
+  llmPromptTokens: Float
+  llmTemperature: Float
+  llmTopP: Float
+  llmTotalTokens: Float
+  overallConfidence: Float
+  overallScore: Float
+  prosConfidence: Float
+  textureConfidence: Float
+  validImageConfidence: Float
+}
+
+"""
+order by avg() on columns of table "bread_entries"
+"""
+input BreadEntriesAvgOrderBy {
+  consConfidence: OrderBy
+  crumbStructureConfidence: OrderBy
+  crustCrumbConfidence: OrderBy
+  expertGuidanceConfidence: OrderBy
+  holeDistributionConfidence: OrderBy
+  llmCompletionTokens: OrderBy
+  llmFrequencyPenalty: OrderBy
+  llmPresencePenalty: OrderBy
+  llmPromptTokens: OrderBy
+  llmTemperature: OrderBy
+  llmTopP: OrderBy
+  llmTotalTokens: OrderBy
+  overallConfidence: OrderBy
+  overallScore: OrderBy
+  prosConfidence: OrderBy
+  textureConfidence: OrderBy
+  validImageConfidence: OrderBy
+}
+
+"""
+Boolean expression to filter rows from the table "bread_entries". All fields are combined with a logical 'AND'.
+"""
+input BreadEntriesBoolExp {
+  _and: [BreadEntriesBoolExp!]
+  _not: BreadEntriesBoolExp
+  _or: [BreadEntriesBoolExp!]
+  analysis: StringComparisonExp
+  archivedAt: TimestamptzComparisonExp
+  cons: StringComparisonExp
+  consConfidence: NumericComparisonExp
+  createdAt: TimestamptzComparisonExp
+  crumbStructure: StringComparisonExp
+  crumbStructureConfidence: NumericComparisonExp
+  crumbStructureDescription: StringComparisonExp
+  crustCrumbConfidence: NumericComparisonExp
+  crustCrumbDescription: StringComparisonExp
+  deletedAt: TimestamptzComparisonExp
+  expertGuidance: StringComparisonExp
+  expertGuidanceConfidence: NumericComparisonExp
+  hasLargeHolesNearTop: BooleanComparisonExp
+  hasSeparation: BooleanComparisonExp
+  hasValidImage: BooleanComparisonExp
+  holeDistributionConfidence: NumericComparisonExp
+  holeDistributionDescription: StringComparisonExp
+  id: UuidComparisonExp
+  images: BreadEntryImagesBoolExp
+  imagesAggregate: BreadEntryImagesAggregateBoolExp
+  isGummyOrDense: BooleanComparisonExp
+  isHoleDistributionEven: BooleanComparisonExp
+  isLightAndAiry: BooleanComparisonExp
+  isWellBonded: BooleanComparisonExp
+  llmCompletionTokens: IntComparisonExp
+  llmFrequencyPenalty: NumericComparisonExp
+  llmModel: StringComparisonExp
+  llmPresencePenalty: NumericComparisonExp
+  llmPromptTokens: IntComparisonExp
+  llmTemperature: NumericComparisonExp
+  llmTopP: NumericComparisonExp
+  llmTotalTokens: IntComparisonExp
+  message: StringComparisonExp
+  notes: StringComparisonExp
+  overallConfidence: NumericComparisonExp
+  overallScore: NumericComparisonExp
+  pros: StringComparisonExp
+  prosConfidence: NumericComparisonExp
+  recipe: RecipesBoolExp
+  recipeId: UuidComparisonExp
+  summary: StringComparisonExp
+  textureConfidence: NumericComparisonExp
+  textureDescription: StringComparisonExp
+  trendAnalysis: StringComparisonExp
+  updatedAt: TimestamptzComparisonExp
+  user: UsersBoolExp
+  userId: UuidComparisonExp
+  validImageConfidence: NumericComparisonExp
+}
+
+"""
+unique or primary key constraints on table "bread_entries"
+"""
+enum BreadEntriesConstraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  bread_entries_pkey
+}
+
+"""
+input type for incrementing numeric columns in table "bread_entries"
+"""
+input BreadEntriesIncInput {
+  consConfidence: numeric
+  crumbStructureConfidence: numeric
+  crustCrumbConfidence: numeric
+  expertGuidanceConfidence: numeric
+  holeDistributionConfidence: numeric
+  llmCompletionTokens: Int
+  llmFrequencyPenalty: numeric
+  llmPresencePenalty: numeric
+  llmPromptTokens: Int
+  llmTemperature: numeric
+  llmTopP: numeric
+  llmTotalTokens: Int
+  overallConfidence: numeric
+  overallScore: numeric
+  prosConfidence: numeric
+  textureConfidence: numeric
+  validImageConfidence: numeric
+}
+
+"""
+input type for inserting data into table "bread_entries"
+"""
+input BreadEntriesInsertInput {
+  analysis: String
+  archivedAt: timestamptz
+  cons: String
+  consConfidence: numeric
+  createdAt: timestamptz
+  crumbStructure: String
+  crumbStructureConfidence: numeric
+  crumbStructureDescription: String
+  crustCrumbConfidence: numeric
+  crustCrumbDescription: String
+  deletedAt: timestamptz
+  expertGuidance: String
+  expertGuidanceConfidence: numeric
+  hasLargeHolesNearTop: Boolean
+  hasSeparation: Boolean
+  hasValidImage: Boolean
+  holeDistributionConfidence: numeric
+  holeDistributionDescription: String
+  id: uuid
+  images: BreadEntryImagesArrRelInsertInput
+  isGummyOrDense: Boolean
+  isHoleDistributionEven: Boolean
+  isLightAndAiry: Boolean
+  isWellBonded: Boolean
+  llmCompletionTokens: Int
+  llmFrequencyPenalty: numeric
+  llmModel: String
+  llmPresencePenalty: numeric
+  llmPromptTokens: Int
+  llmTemperature: numeric
+  llmTopP: numeric
+  llmTotalTokens: Int
+  message: String
+  notes: String
+  overallConfidence: numeric
+  overallScore: numeric
+  pros: String
+  prosConfidence: numeric
+  recipe: RecipesObjRelInsertInput
+  recipeId: uuid
+  summary: String
+  textureConfidence: numeric
+  textureDescription: String
+  trendAnalysis: String
+  updatedAt: timestamptz
+  user: UsersObjRelInsertInput
+  userId: uuid
+  validImageConfidence: numeric
+}
+
+"""aggregate max on columns"""
+type BreadEntriesMaxFields {
+  analysis: String
+  archivedAt: timestamptz
+  cons: String
+  consConfidence: numeric
+  createdAt: timestamptz
+  crumbStructure: String
+  crumbStructureConfidence: numeric
+  crumbStructureDescription: String
+  crustCrumbConfidence: numeric
+  crustCrumbDescription: String
+  deletedAt: timestamptz
+  expertGuidance: String
+  expertGuidanceConfidence: numeric
+  holeDistributionConfidence: numeric
+  holeDistributionDescription: String
+  id: uuid
+  llmCompletionTokens: Int
+  llmFrequencyPenalty: numeric
+  llmModel: String
+  llmPresencePenalty: numeric
+  llmPromptTokens: Int
+  llmTemperature: numeric
+  llmTopP: numeric
+  llmTotalTokens: Int
+  message: String
+  notes: String
+  overallConfidence: numeric
+  overallScore: numeric
+  pros: String
+  prosConfidence: numeric
+  recipeId: uuid
+  summary: String
+  textureConfidence: numeric
+  textureDescription: String
+  trendAnalysis: String
+  updatedAt: timestamptz
+  userId: uuid
+  validImageConfidence: numeric
+}
+
+"""
+order by max() on columns of table "bread_entries"
+"""
+input BreadEntriesMaxOrderBy {
+  analysis: OrderBy
+  archivedAt: OrderBy
+  cons: OrderBy
+  consConfidence: OrderBy
+  createdAt: OrderBy
+  crumbStructure: OrderBy
+  crumbStructureConfidence: OrderBy
+  crumbStructureDescription: OrderBy
+  crustCrumbConfidence: OrderBy
+  crustCrumbDescription: OrderBy
+  deletedAt: OrderBy
+  expertGuidance: OrderBy
+  expertGuidanceConfidence: OrderBy
+  holeDistributionConfidence: OrderBy
+  holeDistributionDescription: OrderBy
+  id: OrderBy
+  llmCompletionTokens: OrderBy
+  llmFrequencyPenalty: OrderBy
+  llmModel: OrderBy
+  llmPresencePenalty: OrderBy
+  llmPromptTokens: OrderBy
+  llmTemperature: OrderBy
+  llmTopP: OrderBy
+  llmTotalTokens: OrderBy
+  message: OrderBy
+  notes: OrderBy
+  overallConfidence: OrderBy
+  overallScore: OrderBy
+  pros: OrderBy
+  prosConfidence: OrderBy
+  recipeId: OrderBy
+  summary: OrderBy
+  textureConfidence: OrderBy
+  textureDescription: OrderBy
+  trendAnalysis: OrderBy
+  updatedAt: OrderBy
+  userId: OrderBy
+  validImageConfidence: OrderBy
+}
+
+"""aggregate min on columns"""
+type BreadEntriesMinFields {
+  analysis: String
+  archivedAt: timestamptz
+  cons: String
+  consConfidence: numeric
+  createdAt: timestamptz
+  crumbStructure: String
+  crumbStructureConfidence: numeric
+  crumbStructureDescription: String
+  crustCrumbConfidence: numeric
+  crustCrumbDescription: String
+  deletedAt: timestamptz
+  expertGuidance: String
+  expertGuidanceConfidence: numeric
+  holeDistributionConfidence: numeric
+  holeDistributionDescription: String
+  id: uuid
+  llmCompletionTokens: Int
+  llmFrequencyPenalty: numeric
+  llmModel: String
+  llmPresencePenalty: numeric
+  llmPromptTokens: Int
+  llmTemperature: numeric
+  llmTopP: numeric
+  llmTotalTokens: Int
+  message: String
+  notes: String
+  overallConfidence: numeric
+  overallScore: numeric
+  pros: String
+  prosConfidence: numeric
+  recipeId: uuid
+  summary: String
+  textureConfidence: numeric
+  textureDescription: String
+  trendAnalysis: String
+  updatedAt: timestamptz
+  userId: uuid
+  validImageConfidence: numeric
+}
+
+"""
+order by min() on columns of table "bread_entries"
+"""
+input BreadEntriesMinOrderBy {
+  analysis: OrderBy
+  archivedAt: OrderBy
+  cons: OrderBy
+  consConfidence: OrderBy
+  createdAt: OrderBy
+  crumbStructure: OrderBy
+  crumbStructureConfidence: OrderBy
+  crumbStructureDescription: OrderBy
+  crustCrumbConfidence: OrderBy
+  crustCrumbDescription: OrderBy
+  deletedAt: OrderBy
+  expertGuidance: OrderBy
+  expertGuidanceConfidence: OrderBy
+  holeDistributionConfidence: OrderBy
+  holeDistributionDescription: OrderBy
+  id: OrderBy
+  llmCompletionTokens: OrderBy
+  llmFrequencyPenalty: OrderBy
+  llmModel: OrderBy
+  llmPresencePenalty: OrderBy
+  llmPromptTokens: OrderBy
+  llmTemperature: OrderBy
+  llmTopP: OrderBy
+  llmTotalTokens: OrderBy
+  message: OrderBy
+  notes: OrderBy
+  overallConfidence: OrderBy
+  overallScore: OrderBy
+  pros: OrderBy
+  prosConfidence: OrderBy
+  recipeId: OrderBy
+  summary: OrderBy
+  textureConfidence: OrderBy
+  textureDescription: OrderBy
+  trendAnalysis: OrderBy
+  updatedAt: OrderBy
+  userId: OrderBy
+  validImageConfidence: OrderBy
+}
+
+"""
+response of any mutation on the table "bread_entries"
+"""
+type BreadEntriesMutationResponse {
+  """number of rows affected by the mutation"""
+  affectedRows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [BreadEntries!]!
+}
+
+"""
+input type for inserting object relation for remote table "bread_entries"
+"""
+input BreadEntriesObjRelInsertInput {
+  data: BreadEntriesInsertInput!
+
+  """upsert condition"""
+  onConflict: BreadEntriesOnConflict
+}
+
+"""
+on_conflict condition type for table "bread_entries"
+"""
+input BreadEntriesOnConflict {
+  constraint: BreadEntriesConstraint!
+  updateColumns: [BreadEntriesUpdateColumn!]! = []
+  where: BreadEntriesBoolExp
+}
+
+"""Ordering options when selecting data from "bread_entries"."""
+input BreadEntriesOrderBy {
+  analysis: OrderBy
+  archivedAt: OrderBy
+  cons: OrderBy
+  consConfidence: OrderBy
+  createdAt: OrderBy
+  crumbStructure: OrderBy
+  crumbStructureConfidence: OrderBy
+  crumbStructureDescription: OrderBy
+  crustCrumbConfidence: OrderBy
+  crustCrumbDescription: OrderBy
+  deletedAt: OrderBy
+  expertGuidance: OrderBy
+  expertGuidanceConfidence: OrderBy
+  hasLargeHolesNearTop: OrderBy
+  hasSeparation: OrderBy
+  hasValidImage: OrderBy
+  holeDistributionConfidence: OrderBy
+  holeDistributionDescription: OrderBy
+  id: OrderBy
+  imagesAggregate: BreadEntryImagesAggregateOrderBy
+  isGummyOrDense: OrderBy
+  isHoleDistributionEven: OrderBy
+  isLightAndAiry: OrderBy
+  isWellBonded: OrderBy
+  llmCompletionTokens: OrderBy
+  llmFrequencyPenalty: OrderBy
+  llmModel: OrderBy
+  llmPresencePenalty: OrderBy
+  llmPromptTokens: OrderBy
+  llmTemperature: OrderBy
+  llmTopP: OrderBy
+  llmTotalTokens: OrderBy
+  message: OrderBy
+  notes: OrderBy
+  overallConfidence: OrderBy
+  overallScore: OrderBy
+  pros: OrderBy
+  prosConfidence: OrderBy
+  recipe: RecipesOrderBy
+  recipeId: OrderBy
+  summary: OrderBy
+  textureConfidence: OrderBy
+  textureDescription: OrderBy
+  trendAnalysis: OrderBy
+  updatedAt: OrderBy
+  user: UsersOrderBy
+  userId: OrderBy
+  validImageConfidence: OrderBy
+}
+
+"""primary key columns input for table: bread_entries"""
+input BreadEntriesPkColumnsInput {
+  id: uuid!
+}
+
+"""
+select columns of table "bread_entries"
+"""
+enum BreadEntriesSelectColumn {
+  """column name"""
+  analysis
+
+  """column name"""
+  archivedAt
+
+  """column name"""
+  cons
+
+  """column name"""
+  consConfidence
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  crumbStructure
+
+  """column name"""
+  crumbStructureConfidence
+
+  """column name"""
+  crumbStructureDescription
+
+  """column name"""
+  crustCrumbConfidence
+
+  """column name"""
+  crustCrumbDescription
+
+  """column name"""
+  deletedAt
+
+  """column name"""
+  expertGuidance
+
+  """column name"""
+  expertGuidanceConfidence
+
+  """column name"""
+  hasLargeHolesNearTop
+
+  """column name"""
+  hasSeparation
+
+  """column name"""
+  hasValidImage
+
+  """column name"""
+  holeDistributionConfidence
+
+  """column name"""
+  holeDistributionDescription
+
+  """column name"""
+  id
+
+  """column name"""
+  isGummyOrDense
+
+  """column name"""
+  isHoleDistributionEven
+
+  """column name"""
+  isLightAndAiry
+
+  """column name"""
+  isWellBonded
+
+  """column name"""
+  llmCompletionTokens
+
+  """column name"""
+  llmFrequencyPenalty
+
+  """column name"""
+  llmModel
+
+  """column name"""
+  llmPresencePenalty
+
+  """column name"""
+  llmPromptTokens
+
+  """column name"""
+  llmTemperature
+
+  """column name"""
+  llmTopP
+
+  """column name"""
+  llmTotalTokens
+
+  """column name"""
+  message
+
+  """column name"""
+  notes
+
+  """column name"""
+  overallConfidence
+
+  """column name"""
+  overallScore
+
+  """column name"""
+  pros
+
+  """column name"""
+  prosConfidence
+
+  """column name"""
+  recipeId
+
+  """column name"""
+  summary
+
+  """column name"""
+  textureConfidence
+
+  """column name"""
+  textureDescription
+
+  """column name"""
+  trendAnalysis
+
+  """column name"""
+  updatedAt
+
+  """column name"""
+  userId
+
+  """column name"""
+  validImageConfidence
+}
+
+"""
+select "breadEntriesAggregateBoolExpBool_andArgumentsColumns" columns of table "bread_entries"
+"""
+enum BreadEntriesSelectColumnBreadEntriesAggregateBoolExpBool_andArgumentsColumns {
+  """column name"""
+  hasLargeHolesNearTop
+
+  """column name"""
+  hasSeparation
+
+  """column name"""
+  hasValidImage
+
+  """column name"""
+  isGummyOrDense
+
+  """column name"""
+  isHoleDistributionEven
+
+  """column name"""
+  isLightAndAiry
+
+  """column name"""
+  isWellBonded
+}
+
+"""
+select "breadEntriesAggregateBoolExpBool_orArgumentsColumns" columns of table "bread_entries"
+"""
+enum BreadEntriesSelectColumnBreadEntriesAggregateBoolExpBool_orArgumentsColumns {
+  """column name"""
+  hasLargeHolesNearTop
+
+  """column name"""
+  hasSeparation
+
+  """column name"""
+  hasValidImage
+
+  """column name"""
+  isGummyOrDense
+
+  """column name"""
+  isHoleDistributionEven
+
+  """column name"""
+  isLightAndAiry
+
+  """column name"""
+  isWellBonded
+}
+
+"""
+input type for updating data in table "bread_entries"
+"""
+input BreadEntriesSetInput {
+  analysis: String
+  archivedAt: timestamptz
+  cons: String
+  consConfidence: numeric
+  createdAt: timestamptz
+  crumbStructure: String
+  crumbStructureConfidence: numeric
+  crumbStructureDescription: String
+  crustCrumbConfidence: numeric
+  crustCrumbDescription: String
+  deletedAt: timestamptz
+  expertGuidance: String
+  expertGuidanceConfidence: numeric
+  hasLargeHolesNearTop: Boolean
+  hasSeparation: Boolean
+  hasValidImage: Boolean
+  holeDistributionConfidence: numeric
+  holeDistributionDescription: String
+  id: uuid
+  isGummyOrDense: Boolean
+  isHoleDistributionEven: Boolean
+  isLightAndAiry: Boolean
+  isWellBonded: Boolean
+  llmCompletionTokens: Int
+  llmFrequencyPenalty: numeric
+  llmModel: String
+  llmPresencePenalty: numeric
+  llmPromptTokens: Int
+  llmTemperature: numeric
+  llmTopP: numeric
+  llmTotalTokens: Int
+  message: String
+  notes: String
+  overallConfidence: numeric
+  overallScore: numeric
+  pros: String
+  prosConfidence: numeric
+  recipeId: uuid
+  summary: String
+  textureConfidence: numeric
+  textureDescription: String
+  trendAnalysis: String
+  updatedAt: timestamptz
+  userId: uuid
+  validImageConfidence: numeric
+}
+
+"""aggregate stddev on columns"""
+type BreadEntriesStddevFields {
+  consConfidence: Float
+  crumbStructureConfidence: Float
+  crustCrumbConfidence: Float
+  expertGuidanceConfidence: Float
+  holeDistributionConfidence: Float
+  llmCompletionTokens: Float
+  llmFrequencyPenalty: Float
+  llmPresencePenalty: Float
+  llmPromptTokens: Float
+  llmTemperature: Float
+  llmTopP: Float
+  llmTotalTokens: Float
+  overallConfidence: Float
+  overallScore: Float
+  prosConfidence: Float
+  textureConfidence: Float
+  validImageConfidence: Float
+}
+
+"""
+order by stddev() on columns of table "bread_entries"
+"""
+input BreadEntriesStddevOrderBy {
+  consConfidence: OrderBy
+  crumbStructureConfidence: OrderBy
+  crustCrumbConfidence: OrderBy
+  expertGuidanceConfidence: OrderBy
+  holeDistributionConfidence: OrderBy
+  llmCompletionTokens: OrderBy
+  llmFrequencyPenalty: OrderBy
+  llmPresencePenalty: OrderBy
+  llmPromptTokens: OrderBy
+  llmTemperature: OrderBy
+  llmTopP: OrderBy
+  llmTotalTokens: OrderBy
+  overallConfidence: OrderBy
+  overallScore: OrderBy
+  prosConfidence: OrderBy
+  textureConfidence: OrderBy
+  validImageConfidence: OrderBy
+}
+
+"""aggregate stddevPop on columns"""
+type BreadEntriesStddevPopFields {
+  consConfidence: Float
+  crumbStructureConfidence: Float
+  crustCrumbConfidence: Float
+  expertGuidanceConfidence: Float
+  holeDistributionConfidence: Float
+  llmCompletionTokens: Float
+  llmFrequencyPenalty: Float
+  llmPresencePenalty: Float
+  llmPromptTokens: Float
+  llmTemperature: Float
+  llmTopP: Float
+  llmTotalTokens: Float
+  overallConfidence: Float
+  overallScore: Float
+  prosConfidence: Float
+  textureConfidence: Float
+  validImageConfidence: Float
+}
+
+"""
+order by stddevPop() on columns of table "bread_entries"
+"""
+input BreadEntriesStddevPopOrderBy {
+  consConfidence: OrderBy
+  crumbStructureConfidence: OrderBy
+  crustCrumbConfidence: OrderBy
+  expertGuidanceConfidence: OrderBy
+  holeDistributionConfidence: OrderBy
+  llmCompletionTokens: OrderBy
+  llmFrequencyPenalty: OrderBy
+  llmPresencePenalty: OrderBy
+  llmPromptTokens: OrderBy
+  llmTemperature: OrderBy
+  llmTopP: OrderBy
+  llmTotalTokens: OrderBy
+  overallConfidence: OrderBy
+  overallScore: OrderBy
+  prosConfidence: OrderBy
+  textureConfidence: OrderBy
+  validImageConfidence: OrderBy
+}
+
+"""aggregate stddevSamp on columns"""
+type BreadEntriesStddevSampFields {
+  consConfidence: Float
+  crumbStructureConfidence: Float
+  crustCrumbConfidence: Float
+  expertGuidanceConfidence: Float
+  holeDistributionConfidence: Float
+  llmCompletionTokens: Float
+  llmFrequencyPenalty: Float
+  llmPresencePenalty: Float
+  llmPromptTokens: Float
+  llmTemperature: Float
+  llmTopP: Float
+  llmTotalTokens: Float
+  overallConfidence: Float
+  overallScore: Float
+  prosConfidence: Float
+  textureConfidence: Float
+  validImageConfidence: Float
+}
+
+"""
+order by stddevSamp() on columns of table "bread_entries"
+"""
+input BreadEntriesStddevSampOrderBy {
+  consConfidence: OrderBy
+  crumbStructureConfidence: OrderBy
+  crustCrumbConfidence: OrderBy
+  expertGuidanceConfidence: OrderBy
+  holeDistributionConfidence: OrderBy
+  llmCompletionTokens: OrderBy
+  llmFrequencyPenalty: OrderBy
+  llmPresencePenalty: OrderBy
+  llmPromptTokens: OrderBy
+  llmTemperature: OrderBy
+  llmTopP: OrderBy
+  llmTotalTokens: OrderBy
+  overallConfidence: OrderBy
+  overallScore: OrderBy
+  prosConfidence: OrderBy
+  textureConfidence: OrderBy
+  validImageConfidence: OrderBy
+}
+
+"""
+Streaming cursor of the table "bread_entries"
+"""
+input BreadEntriesStreamCursorInput {
+  """Stream column input with initial value"""
+  initialValue: BreadEntriesStreamCursorValueInput!
+
+  """cursor ordering"""
+  ordering: CursorOrdering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input BreadEntriesStreamCursorValueInput {
+  analysis: String
+  archivedAt: timestamptz
+  cons: String
+  consConfidence: numeric
+  createdAt: timestamptz
+  crumbStructure: String
+  crumbStructureConfidence: numeric
+  crumbStructureDescription: String
+  crustCrumbConfidence: numeric
+  crustCrumbDescription: String
+  deletedAt: timestamptz
+  expertGuidance: String
+  expertGuidanceConfidence: numeric
+  hasLargeHolesNearTop: Boolean
+  hasSeparation: Boolean
+  hasValidImage: Boolean
+  holeDistributionConfidence: numeric
+  holeDistributionDescription: String
+  id: uuid
+  isGummyOrDense: Boolean
+  isHoleDistributionEven: Boolean
+  isLightAndAiry: Boolean
+  isWellBonded: Boolean
+  llmCompletionTokens: Int
+  llmFrequencyPenalty: numeric
+  llmModel: String
+  llmPresencePenalty: numeric
+  llmPromptTokens: Int
+  llmTemperature: numeric
+  llmTopP: numeric
+  llmTotalTokens: Int
+  message: String
+  notes: String
+  overallConfidence: numeric
+  overallScore: numeric
+  pros: String
+  prosConfidence: numeric
+  recipeId: uuid
+  summary: String
+  textureConfidence: numeric
+  textureDescription: String
+  trendAnalysis: String
+  updatedAt: timestamptz
+  userId: uuid
+  validImageConfidence: numeric
+}
+
+"""aggregate sum on columns"""
+type BreadEntriesSumFields {
+  consConfidence: numeric
+  crumbStructureConfidence: numeric
+  crustCrumbConfidence: numeric
+  expertGuidanceConfidence: numeric
+  holeDistributionConfidence: numeric
+  llmCompletionTokens: Int
+  llmFrequencyPenalty: numeric
+  llmPresencePenalty: numeric
+  llmPromptTokens: Int
+  llmTemperature: numeric
+  llmTopP: numeric
+  llmTotalTokens: Int
+  overallConfidence: numeric
+  overallScore: numeric
+  prosConfidence: numeric
+  textureConfidence: numeric
+  validImageConfidence: numeric
+}
+
+"""
+order by sum() on columns of table "bread_entries"
+"""
+input BreadEntriesSumOrderBy {
+  consConfidence: OrderBy
+  crumbStructureConfidence: OrderBy
+  crustCrumbConfidence: OrderBy
+  expertGuidanceConfidence: OrderBy
+  holeDistributionConfidence: OrderBy
+  llmCompletionTokens: OrderBy
+  llmFrequencyPenalty: OrderBy
+  llmPresencePenalty: OrderBy
+  llmPromptTokens: OrderBy
+  llmTemperature: OrderBy
+  llmTopP: OrderBy
+  llmTotalTokens: OrderBy
+  overallConfidence: OrderBy
+  overallScore: OrderBy
+  prosConfidence: OrderBy
+  textureConfidence: OrderBy
+  validImageConfidence: OrderBy
+}
+
+"""
+update columns of table "bread_entries"
+"""
+enum BreadEntriesUpdateColumn {
+  """column name"""
+  analysis
+
+  """column name"""
+  archivedAt
+
+  """column name"""
+  cons
+
+  """column name"""
+  consConfidence
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  crumbStructure
+
+  """column name"""
+  crumbStructureConfidence
+
+  """column name"""
+  crumbStructureDescription
+
+  """column name"""
+  crustCrumbConfidence
+
+  """column name"""
+  crustCrumbDescription
+
+  """column name"""
+  deletedAt
+
+  """column name"""
+  expertGuidance
+
+  """column name"""
+  expertGuidanceConfidence
+
+  """column name"""
+  hasLargeHolesNearTop
+
+  """column name"""
+  hasSeparation
+
+  """column name"""
+  hasValidImage
+
+  """column name"""
+  holeDistributionConfidence
+
+  """column name"""
+  holeDistributionDescription
+
+  """column name"""
+  id
+
+  """column name"""
+  isGummyOrDense
+
+  """column name"""
+  isHoleDistributionEven
+
+  """column name"""
+  isLightAndAiry
+
+  """column name"""
+  isWellBonded
+
+  """column name"""
+  llmCompletionTokens
+
+  """column name"""
+  llmFrequencyPenalty
+
+  """column name"""
+  llmModel
+
+  """column name"""
+  llmPresencePenalty
+
+  """column name"""
+  llmPromptTokens
+
+  """column name"""
+  llmTemperature
+
+  """column name"""
+  llmTopP
+
+  """column name"""
+  llmTotalTokens
+
+  """column name"""
+  message
+
+  """column name"""
+  notes
+
+  """column name"""
+  overallConfidence
+
+  """column name"""
+  overallScore
+
+  """column name"""
+  pros
+
+  """column name"""
+  prosConfidence
+
+  """column name"""
+  recipeId
+
+  """column name"""
+  summary
+
+  """column name"""
+  textureConfidence
+
+  """column name"""
+  textureDescription
+
+  """column name"""
+  trendAnalysis
+
+  """column name"""
+  updatedAt
+
+  """column name"""
+  userId
+
+  """column name"""
+  validImageConfidence
+}
+
+input BreadEntriesUpdates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: BreadEntriesIncInput
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: BreadEntriesSetInput
+
+  """filter the rows which have to be updated"""
+  where: BreadEntriesBoolExp!
+}
+
+"""aggregate varPop on columns"""
+type BreadEntriesVarPopFields {
+  consConfidence: Float
+  crumbStructureConfidence: Float
+  crustCrumbConfidence: Float
+  expertGuidanceConfidence: Float
+  holeDistributionConfidence: Float
+  llmCompletionTokens: Float
+  llmFrequencyPenalty: Float
+  llmPresencePenalty: Float
+  llmPromptTokens: Float
+  llmTemperature: Float
+  llmTopP: Float
+  llmTotalTokens: Float
+  overallConfidence: Float
+  overallScore: Float
+  prosConfidence: Float
+  textureConfidence: Float
+  validImageConfidence: Float
+}
+
+"""
+order by varPop() on columns of table "bread_entries"
+"""
+input BreadEntriesVarPopOrderBy {
+  consConfidence: OrderBy
+  crumbStructureConfidence: OrderBy
+  crustCrumbConfidence: OrderBy
+  expertGuidanceConfidence: OrderBy
+  holeDistributionConfidence: OrderBy
+  llmCompletionTokens: OrderBy
+  llmFrequencyPenalty: OrderBy
+  llmPresencePenalty: OrderBy
+  llmPromptTokens: OrderBy
+  llmTemperature: OrderBy
+  llmTopP: OrderBy
+  llmTotalTokens: OrderBy
+  overallConfidence: OrderBy
+  overallScore: OrderBy
+  prosConfidence: OrderBy
+  textureConfidence: OrderBy
+  validImageConfidence: OrderBy
+}
+
+"""aggregate varSamp on columns"""
+type BreadEntriesVarSampFields {
+  consConfidence: Float
+  crumbStructureConfidence: Float
+  crustCrumbConfidence: Float
+  expertGuidanceConfidence: Float
+  holeDistributionConfidence: Float
+  llmCompletionTokens: Float
+  llmFrequencyPenalty: Float
+  llmPresencePenalty: Float
+  llmPromptTokens: Float
+  llmTemperature: Float
+  llmTopP: Float
+  llmTotalTokens: Float
+  overallConfidence: Float
+  overallScore: Float
+  prosConfidence: Float
+  textureConfidence: Float
+  validImageConfidence: Float
+}
+
+"""
+order by varSamp() on columns of table "bread_entries"
+"""
+input BreadEntriesVarSampOrderBy {
+  consConfidence: OrderBy
+  crumbStructureConfidence: OrderBy
+  crustCrumbConfidence: OrderBy
+  expertGuidanceConfidence: OrderBy
+  holeDistributionConfidence: OrderBy
+  llmCompletionTokens: OrderBy
+  llmFrequencyPenalty: OrderBy
+  llmPresencePenalty: OrderBy
+  llmPromptTokens: OrderBy
+  llmTemperature: OrderBy
+  llmTopP: OrderBy
+  llmTotalTokens: OrderBy
+  overallConfidence: OrderBy
+  overallScore: OrderBy
+  prosConfidence: OrderBy
+  textureConfidence: OrderBy
+  validImageConfidence: OrderBy
+}
+
+"""aggregate variance on columns"""
+type BreadEntriesVarianceFields {
+  consConfidence: Float
+  crumbStructureConfidence: Float
+  crustCrumbConfidence: Float
+  expertGuidanceConfidence: Float
+  holeDistributionConfidence: Float
+  llmCompletionTokens: Float
+  llmFrequencyPenalty: Float
+  llmPresencePenalty: Float
+  llmPromptTokens: Float
+  llmTemperature: Float
+  llmTopP: Float
+  llmTotalTokens: Float
+  overallConfidence: Float
+  overallScore: Float
+  prosConfidence: Float
+  textureConfidence: Float
+  validImageConfidence: Float
+}
+
+"""
+order by variance() on columns of table "bread_entries"
+"""
+input BreadEntriesVarianceOrderBy {
+  consConfidence: OrderBy
+  crumbStructureConfidence: OrderBy
+  crustCrumbConfidence: OrderBy
+  expertGuidanceConfidence: OrderBy
+  holeDistributionConfidence: OrderBy
+  llmCompletionTokens: OrderBy
+  llmFrequencyPenalty: OrderBy
+  llmPresencePenalty: OrderBy
+  llmPromptTokens: OrderBy
+  llmTemperature: OrderBy
+  llmTopP: OrderBy
+  llmTotalTokens: OrderBy
+  overallConfidence: OrderBy
+  overallScore: OrderBy
+  prosConfidence: OrderBy
+  textureConfidence: OrderBy
+  validImageConfidence: OrderBy
+}
+
+"""
+columns and relationships of "bread_entry_images"
+"""
+type BreadEntryImages {
+  archivedAt: timestamptz
+
+  """An object relationship"""
+  breadEntry: BreadEntries!
+  breadEntryId: uuid!
+  createdAt: timestamptz!
+  deletedAt: timestamptz
+  id: uuid!
+  imageName: String!
+  imagePath: String!
+  imageStorageProvider: String!
+  mimeType: String!
+  originalImageName: String!
+  size: Int!
+  updatedAt: timestamptz!
+}
+
+"""
+aggregated selection of "bread_entry_images"
+"""
+type BreadEntryImagesAggregate {
+  aggregate: BreadEntryImagesAggregateFields
+  nodes: [BreadEntryImages!]!
+}
+
+input BreadEntryImagesAggregateBoolExp {
+  count: breadEntryImagesAggregateBoolExpCount
+}
+
+"""
+aggregate fields of "bread_entry_images"
+"""
+type BreadEntryImagesAggregateFields {
+  avg: BreadEntryImagesAvgFields
+  count(columns: [BreadEntryImagesSelectColumn!], distinct: Boolean): Int!
+  max: BreadEntryImagesMaxFields
+  min: BreadEntryImagesMinFields
+  stddev: BreadEntryImagesStddevFields
+  stddevPop: BreadEntryImagesStddevPopFields
+  stddevSamp: BreadEntryImagesStddevSampFields
+  sum: BreadEntryImagesSumFields
+  varPop: BreadEntryImagesVarPopFields
+  varSamp: BreadEntryImagesVarSampFields
+  variance: BreadEntryImagesVarianceFields
+}
+
+"""
+order by aggregate values of table "bread_entry_images"
+"""
+input BreadEntryImagesAggregateOrderBy {
+  avg: BreadEntryImagesAvgOrderBy
+  count: OrderBy
+  max: BreadEntryImagesMaxOrderBy
+  min: BreadEntryImagesMinOrderBy
+  stddev: BreadEntryImagesStddevOrderBy
+  stddevPop: BreadEntryImagesStddevPopOrderBy
+  stddevSamp: BreadEntryImagesStddevSampOrderBy
+  sum: BreadEntryImagesSumOrderBy
+  varPop: BreadEntryImagesVarPopOrderBy
+  varSamp: BreadEntryImagesVarSampOrderBy
+  variance: BreadEntryImagesVarianceOrderBy
+}
+
+"""
+input type for inserting array relation for remote table "bread_entry_images"
+"""
+input BreadEntryImagesArrRelInsertInput {
+  data: [BreadEntryImagesInsertInput!]!
+
+  """upsert condition"""
+  onConflict: BreadEntryImagesOnConflict
+}
+
+"""aggregate avg on columns"""
+type BreadEntryImagesAvgFields {
+  size: Float
+}
+
+"""
+order by avg() on columns of table "bread_entry_images"
+"""
+input BreadEntryImagesAvgOrderBy {
+  size: OrderBy
+}
+
+"""
+Boolean expression to filter rows from the table "bread_entry_images". All fields are combined with a logical 'AND'.
+"""
+input BreadEntryImagesBoolExp {
+  _and: [BreadEntryImagesBoolExp!]
+  _not: BreadEntryImagesBoolExp
+  _or: [BreadEntryImagesBoolExp!]
+  archivedAt: TimestamptzComparisonExp
+  breadEntry: BreadEntriesBoolExp
+  breadEntryId: UuidComparisonExp
+  createdAt: TimestamptzComparisonExp
+  deletedAt: TimestamptzComparisonExp
+  id: UuidComparisonExp
+  imageName: StringComparisonExp
+  imagePath: StringComparisonExp
+  imageStorageProvider: StringComparisonExp
+  mimeType: StringComparisonExp
+  originalImageName: StringComparisonExp
+  size: IntComparisonExp
+  updatedAt: TimestamptzComparisonExp
+}
+
+"""
+unique or primary key constraints on table "bread_entry_images"
+"""
+enum BreadEntryImagesConstraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  bread_entry_images_pkey
+}
+
+"""
+input type for incrementing numeric columns in table "bread_entry_images"
+"""
+input BreadEntryImagesIncInput {
+  size: Int
+}
+
+"""
+input type for inserting data into table "bread_entry_images"
+"""
+input BreadEntryImagesInsertInput {
+  archivedAt: timestamptz
+  breadEntry: BreadEntriesObjRelInsertInput
+  breadEntryId: uuid
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  id: uuid
+  imageName: String
+  imagePath: String
+  imageStorageProvider: String
+  mimeType: String
+  originalImageName: String
+  size: Int
+  updatedAt: timestamptz
+}
+
+"""aggregate max on columns"""
+type BreadEntryImagesMaxFields {
+  archivedAt: timestamptz
+  breadEntryId: uuid
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  id: uuid
+  imageName: String
+  imagePath: String
+  imageStorageProvider: String
+  mimeType: String
+  originalImageName: String
+  size: Int
+  updatedAt: timestamptz
+}
+
+"""
+order by max() on columns of table "bread_entry_images"
+"""
+input BreadEntryImagesMaxOrderBy {
+  archivedAt: OrderBy
+  breadEntryId: OrderBy
+  createdAt: OrderBy
+  deletedAt: OrderBy
+  id: OrderBy
+  imageName: OrderBy
+  imagePath: OrderBy
+  imageStorageProvider: OrderBy
+  mimeType: OrderBy
+  originalImageName: OrderBy
+  size: OrderBy
+  updatedAt: OrderBy
+}
+
+"""aggregate min on columns"""
+type BreadEntryImagesMinFields {
+  archivedAt: timestamptz
+  breadEntryId: uuid
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  id: uuid
+  imageName: String
+  imagePath: String
+  imageStorageProvider: String
+  mimeType: String
+  originalImageName: String
+  size: Int
+  updatedAt: timestamptz
+}
+
+"""
+order by min() on columns of table "bread_entry_images"
+"""
+input BreadEntryImagesMinOrderBy {
+  archivedAt: OrderBy
+  breadEntryId: OrderBy
+  createdAt: OrderBy
+  deletedAt: OrderBy
+  id: OrderBy
+  imageName: OrderBy
+  imagePath: OrderBy
+  imageStorageProvider: OrderBy
+  mimeType: OrderBy
+  originalImageName: OrderBy
+  size: OrderBy
+  updatedAt: OrderBy
+}
+
+"""
+response of any mutation on the table "bread_entry_images"
+"""
+type BreadEntryImagesMutationResponse {
+  """number of rows affected by the mutation"""
+  affectedRows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [BreadEntryImages!]!
+}
+
+"""
+on_conflict condition type for table "bread_entry_images"
+"""
+input BreadEntryImagesOnConflict {
+  constraint: BreadEntryImagesConstraint!
+  updateColumns: [BreadEntryImagesUpdateColumn!]! = []
+  where: BreadEntryImagesBoolExp
+}
+
+"""Ordering options when selecting data from "bread_entry_images"."""
+input BreadEntryImagesOrderBy {
+  archivedAt: OrderBy
+  breadEntry: BreadEntriesOrderBy
+  breadEntryId: OrderBy
+  createdAt: OrderBy
+  deletedAt: OrderBy
+  id: OrderBy
+  imageName: OrderBy
+  imagePath: OrderBy
+  imageStorageProvider: OrderBy
+  mimeType: OrderBy
+  originalImageName: OrderBy
+  size: OrderBy
+  updatedAt: OrderBy
+}
+
+"""primary key columns input for table: bread_entry_images"""
+input BreadEntryImagesPkColumnsInput {
+  id: uuid!
+}
+
+"""
+select columns of table "bread_entry_images"
+"""
+enum BreadEntryImagesSelectColumn {
+  """column name"""
+  archivedAt
+
+  """column name"""
+  breadEntryId
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  deletedAt
+
+  """column name"""
+  id
+
+  """column name"""
+  imageName
+
+  """column name"""
+  imagePath
+
+  """column name"""
+  imageStorageProvider
+
+  """column name"""
+  mimeType
+
+  """column name"""
+  originalImageName
+
+  """column name"""
+  size
+
+  """column name"""
+  updatedAt
+}
+
+"""
+input type for updating data in table "bread_entry_images"
+"""
+input BreadEntryImagesSetInput {
+  archivedAt: timestamptz
+  breadEntryId: uuid
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  id: uuid
+  imageName: String
+  imagePath: String
+  imageStorageProvider: String
+  mimeType: String
+  originalImageName: String
+  size: Int
+  updatedAt: timestamptz
+}
+
+"""aggregate stddev on columns"""
+type BreadEntryImagesStddevFields {
+  size: Float
+}
+
+"""
+order by stddev() on columns of table "bread_entry_images"
+"""
+input BreadEntryImagesStddevOrderBy {
+  size: OrderBy
+}
+
+"""aggregate stddevPop on columns"""
+type BreadEntryImagesStddevPopFields {
+  size: Float
+}
+
+"""
+order by stddevPop() on columns of table "bread_entry_images"
+"""
+input BreadEntryImagesStddevPopOrderBy {
+  size: OrderBy
+}
+
+"""aggregate stddevSamp on columns"""
+type BreadEntryImagesStddevSampFields {
+  size: Float
+}
+
+"""
+order by stddevSamp() on columns of table "bread_entry_images"
+"""
+input BreadEntryImagesStddevSampOrderBy {
+  size: OrderBy
+}
+
+"""
+Streaming cursor of the table "bread_entry_images"
+"""
+input BreadEntryImagesStreamCursorInput {
+  """Stream column input with initial value"""
+  initialValue: BreadEntryImagesStreamCursorValueInput!
+
+  """cursor ordering"""
+  ordering: CursorOrdering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input BreadEntryImagesStreamCursorValueInput {
+  archivedAt: timestamptz
+  breadEntryId: uuid
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  id: uuid
+  imageName: String
+  imagePath: String
+  imageStorageProvider: String
+  mimeType: String
+  originalImageName: String
+  size: Int
+  updatedAt: timestamptz
+}
+
+"""aggregate sum on columns"""
+type BreadEntryImagesSumFields {
+  size: Int
+}
+
+"""
+order by sum() on columns of table "bread_entry_images"
+"""
+input BreadEntryImagesSumOrderBy {
+  size: OrderBy
+}
+
+"""
+update columns of table "bread_entry_images"
+"""
+enum BreadEntryImagesUpdateColumn {
+  """column name"""
+  archivedAt
+
+  """column name"""
+  breadEntryId
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  deletedAt
+
+  """column name"""
+  id
+
+  """column name"""
+  imageName
+
+  """column name"""
+  imagePath
+
+  """column name"""
+  imageStorageProvider
+
+  """column name"""
+  mimeType
+
+  """column name"""
+  originalImageName
+
+  """column name"""
+  size
+
+  """column name"""
+  updatedAt
+}
+
+input BreadEntryImagesUpdates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: BreadEntryImagesIncInput
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: BreadEntryImagesSetInput
+
+  """filter the rows which have to be updated"""
+  where: BreadEntryImagesBoolExp!
+}
+
+"""aggregate varPop on columns"""
+type BreadEntryImagesVarPopFields {
+  size: Float
+}
+
+"""
+order by varPop() on columns of table "bread_entry_images"
+"""
+input BreadEntryImagesVarPopOrderBy {
+  size: OrderBy
+}
+
+"""aggregate varSamp on columns"""
+type BreadEntryImagesVarSampFields {
+  size: Float
+}
+
+"""
+order by varSamp() on columns of table "bread_entry_images"
+"""
+input BreadEntryImagesVarSampOrderBy {
+  size: OrderBy
+}
+
+"""aggregate variance on columns"""
+type BreadEntryImagesVarianceFields {
+  size: Float
+}
+
+"""
+order by variance() on columns of table "bread_entry_images"
+"""
+input BreadEntryImagesVarianceOrderBy {
+  size: OrderBy
+}
+
+"""
+columns and relationships of "chat_message_files"
+"""
+type ChatMessageFiles {
+  archivedAt: timestamptz
+  chatMessageId: uuid!
+  createdAt: timestamptz!
+  deletedAt: timestamptz
+  fileName: String!
+  filePath: String!
+  fileStorageProvider: String!
+  id: uuid!
+
+  """An object relationship"""
+  message: ChatMessages!
+  mimeType: String!
+  originalFileName: String!
+  size: Int!
+  updatedAt: timestamptz!
+}
+
+"""
+aggregated selection of "chat_message_files"
+"""
+type ChatMessageFilesAggregate {
+  aggregate: ChatMessageFilesAggregateFields
+  nodes: [ChatMessageFiles!]!
+}
+
+input ChatMessageFilesAggregateBoolExp {
+  count: chatMessageFilesAggregateBoolExpCount
+}
+
+"""
+aggregate fields of "chat_message_files"
+"""
+type ChatMessageFilesAggregateFields {
+  avg: ChatMessageFilesAvgFields
+  count(columns: [ChatMessageFilesSelectColumn!], distinct: Boolean): Int!
+  max: ChatMessageFilesMaxFields
+  min: ChatMessageFilesMinFields
+  stddev: ChatMessageFilesStddevFields
+  stddevPop: ChatMessageFilesStddevPopFields
+  stddevSamp: ChatMessageFilesStddevSampFields
+  sum: ChatMessageFilesSumFields
+  varPop: ChatMessageFilesVarPopFields
+  varSamp: ChatMessageFilesVarSampFields
+  variance: ChatMessageFilesVarianceFields
+}
+
+"""
+order by aggregate values of table "chat_message_files"
+"""
+input ChatMessageFilesAggregateOrderBy {
+  avg: ChatMessageFilesAvgOrderBy
+  count: OrderBy
+  max: ChatMessageFilesMaxOrderBy
+  min: ChatMessageFilesMinOrderBy
+  stddev: ChatMessageFilesStddevOrderBy
+  stddevPop: ChatMessageFilesStddevPopOrderBy
+  stddevSamp: ChatMessageFilesStddevSampOrderBy
+  sum: ChatMessageFilesSumOrderBy
+  varPop: ChatMessageFilesVarPopOrderBy
+  varSamp: ChatMessageFilesVarSampOrderBy
+  variance: ChatMessageFilesVarianceOrderBy
+}
+
+"""
+input type for inserting array relation for remote table "chat_message_files"
+"""
+input ChatMessageFilesArrRelInsertInput {
+  data: [ChatMessageFilesInsertInput!]!
+
+  """upsert condition"""
+  onConflict: ChatMessageFilesOnConflict
+}
+
+"""aggregate avg on columns"""
+type ChatMessageFilesAvgFields {
+  size: Float
+}
+
+"""
+order by avg() on columns of table "chat_message_files"
+"""
+input ChatMessageFilesAvgOrderBy {
+  size: OrderBy
+}
+
+"""
+Boolean expression to filter rows from the table "chat_message_files". All fields are combined with a logical 'AND'.
+"""
+input ChatMessageFilesBoolExp {
+  _and: [ChatMessageFilesBoolExp!]
+  _not: ChatMessageFilesBoolExp
+  _or: [ChatMessageFilesBoolExp!]
+  archivedAt: TimestamptzComparisonExp
+  chatMessageId: UuidComparisonExp
+  createdAt: TimestamptzComparisonExp
+  deletedAt: TimestamptzComparisonExp
+  fileName: StringComparisonExp
+  filePath: StringComparisonExp
+  fileStorageProvider: StringComparisonExp
+  id: UuidComparisonExp
+  message: ChatMessagesBoolExp
+  mimeType: StringComparisonExp
+  originalFileName: StringComparisonExp
+  size: IntComparisonExp
+  updatedAt: TimestamptzComparisonExp
+}
+
+"""
+unique or primary key constraints on table "chat_message_files"
+"""
+enum ChatMessageFilesConstraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  chat_message_files_pkey
+}
+
+"""
+input type for incrementing numeric columns in table "chat_message_files"
+"""
+input ChatMessageFilesIncInput {
+  size: Int
+}
+
+"""
+input type for inserting data into table "chat_message_files"
+"""
+input ChatMessageFilesInsertInput {
+  archivedAt: timestamptz
+  chatMessageId: uuid
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  fileName: String
+  filePath: String
+  fileStorageProvider: String
+  id: uuid
+  message: ChatMessagesObjRelInsertInput
+  mimeType: String
+  originalFileName: String
+  size: Int
+  updatedAt: timestamptz
+}
+
+"""aggregate max on columns"""
+type ChatMessageFilesMaxFields {
+  archivedAt: timestamptz
+  chatMessageId: uuid
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  fileName: String
+  filePath: String
+  fileStorageProvider: String
+  id: uuid
+  mimeType: String
+  originalFileName: String
+  size: Int
+  updatedAt: timestamptz
+}
+
+"""
+order by max() on columns of table "chat_message_files"
+"""
+input ChatMessageFilesMaxOrderBy {
+  archivedAt: OrderBy
+  chatMessageId: OrderBy
+  createdAt: OrderBy
+  deletedAt: OrderBy
+  fileName: OrderBy
+  filePath: OrderBy
+  fileStorageProvider: OrderBy
+  id: OrderBy
+  mimeType: OrderBy
+  originalFileName: OrderBy
+  size: OrderBy
+  updatedAt: OrderBy
+}
+
+"""aggregate min on columns"""
+type ChatMessageFilesMinFields {
+  archivedAt: timestamptz
+  chatMessageId: uuid
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  fileName: String
+  filePath: String
+  fileStorageProvider: String
+  id: uuid
+  mimeType: String
+  originalFileName: String
+  size: Int
+  updatedAt: timestamptz
+}
+
+"""
+order by min() on columns of table "chat_message_files"
+"""
+input ChatMessageFilesMinOrderBy {
+  archivedAt: OrderBy
+  chatMessageId: OrderBy
+  createdAt: OrderBy
+  deletedAt: OrderBy
+  fileName: OrderBy
+  filePath: OrderBy
+  fileStorageProvider: OrderBy
+  id: OrderBy
+  mimeType: OrderBy
+  originalFileName: OrderBy
+  size: OrderBy
+  updatedAt: OrderBy
+}
+
+"""
+response of any mutation on the table "chat_message_files"
+"""
+type ChatMessageFilesMutationResponse {
+  """number of rows affected by the mutation"""
+  affectedRows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [ChatMessageFiles!]!
+}
+
+"""
+on_conflict condition type for table "chat_message_files"
+"""
+input ChatMessageFilesOnConflict {
+  constraint: ChatMessageFilesConstraint!
+  updateColumns: [ChatMessageFilesUpdateColumn!]! = []
+  where: ChatMessageFilesBoolExp
+}
+
+"""Ordering options when selecting data from "chat_message_files"."""
+input ChatMessageFilesOrderBy {
+  archivedAt: OrderBy
+  chatMessageId: OrderBy
+  createdAt: OrderBy
+  deletedAt: OrderBy
+  fileName: OrderBy
+  filePath: OrderBy
+  fileStorageProvider: OrderBy
+  id: OrderBy
+  message: ChatMessagesOrderBy
+  mimeType: OrderBy
+  originalFileName: OrderBy
+  size: OrderBy
+  updatedAt: OrderBy
+}
+
+"""primary key columns input for table: chat_message_files"""
+input ChatMessageFilesPkColumnsInput {
+  id: uuid!
+}
+
+"""
+select columns of table "chat_message_files"
+"""
+enum ChatMessageFilesSelectColumn {
+  """column name"""
+  archivedAt
+
+  """column name"""
+  chatMessageId
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  deletedAt
+
+  """column name"""
+  fileName
+
+  """column name"""
+  filePath
+
+  """column name"""
+  fileStorageProvider
+
+  """column name"""
+  id
+
+  """column name"""
+  mimeType
+
+  """column name"""
+  originalFileName
+
+  """column name"""
+  size
+
+  """column name"""
+  updatedAt
+}
+
+"""
+input type for updating data in table "chat_message_files"
+"""
+input ChatMessageFilesSetInput {
+  archivedAt: timestamptz
+  chatMessageId: uuid
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  fileName: String
+  filePath: String
+  fileStorageProvider: String
+  id: uuid
+  mimeType: String
+  originalFileName: String
+  size: Int
+  updatedAt: timestamptz
+}
+
+"""aggregate stddev on columns"""
+type ChatMessageFilesStddevFields {
+  size: Float
+}
+
+"""
+order by stddev() on columns of table "chat_message_files"
+"""
+input ChatMessageFilesStddevOrderBy {
+  size: OrderBy
+}
+
+"""aggregate stddevPop on columns"""
+type ChatMessageFilesStddevPopFields {
+  size: Float
+}
+
+"""
+order by stddevPop() on columns of table "chat_message_files"
+"""
+input ChatMessageFilesStddevPopOrderBy {
+  size: OrderBy
+}
+
+"""aggregate stddevSamp on columns"""
+type ChatMessageFilesStddevSampFields {
+  size: Float
+}
+
+"""
+order by stddevSamp() on columns of table "chat_message_files"
+"""
+input ChatMessageFilesStddevSampOrderBy {
+  size: OrderBy
+}
+
+"""
+Streaming cursor of the table "chat_message_files"
+"""
+input ChatMessageFilesStreamCursorInput {
+  """Stream column input with initial value"""
+  initialValue: ChatMessageFilesStreamCursorValueInput!
+
+  """cursor ordering"""
+  ordering: CursorOrdering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input ChatMessageFilesStreamCursorValueInput {
+  archivedAt: timestamptz
+  chatMessageId: uuid
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  fileName: String
+  filePath: String
+  fileStorageProvider: String
+  id: uuid
+  mimeType: String
+  originalFileName: String
+  size: Int
+  updatedAt: timestamptz
+}
+
+"""aggregate sum on columns"""
+type ChatMessageFilesSumFields {
+  size: Int
+}
+
+"""
+order by sum() on columns of table "chat_message_files"
+"""
+input ChatMessageFilesSumOrderBy {
+  size: OrderBy
+}
+
+"""
+update columns of table "chat_message_files"
+"""
+enum ChatMessageFilesUpdateColumn {
+  """column name"""
+  archivedAt
+
+  """column name"""
+  chatMessageId
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  deletedAt
+
+  """column name"""
+  fileName
+
+  """column name"""
+  filePath
+
+  """column name"""
+  fileStorageProvider
+
+  """column name"""
+  id
+
+  """column name"""
+  mimeType
+
+  """column name"""
+  originalFileName
+
+  """column name"""
+  size
+
+  """column name"""
+  updatedAt
+}
+
+input ChatMessageFilesUpdates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: ChatMessageFilesIncInput
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: ChatMessageFilesSetInput
+
+  """filter the rows which have to be updated"""
+  where: ChatMessageFilesBoolExp!
+}
+
+"""aggregate varPop on columns"""
+type ChatMessageFilesVarPopFields {
+  size: Float
+}
+
+"""
+order by varPop() on columns of table "chat_message_files"
+"""
+input ChatMessageFilesVarPopOrderBy {
+  size: OrderBy
+}
+
+"""aggregate varSamp on columns"""
+type ChatMessageFilesVarSampFields {
+  size: Float
+}
+
+"""
+order by varSamp() on columns of table "chat_message_files"
+"""
+input ChatMessageFilesVarSampOrderBy {
+  size: OrderBy
+}
+
+"""aggregate variance on columns"""
+type ChatMessageFilesVarianceFields {
+  size: Float
+}
+
+"""
+order by variance() on columns of table "chat_message_files"
+"""
+input ChatMessageFilesVarianceOrderBy {
+  size: OrderBy
+}
+
+"""
+columns and relationships of "chat_messages"
+"""
+type ChatMessages {
+  archivedAt: timestamptz
+  chatThreadId: uuid!
+  completionTokens: Int!
+  content: String!
+  createdAt: timestamptz!
+  deletedAt: timestamptz
+
+  """An array relationship"""
+  files(
+    """distinct select on columns"""
+    distinctOn: [ChatMessageFilesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [ChatMessageFilesOrderBy!]
+
+    """filter the rows returned"""
+    where: ChatMessageFilesBoolExp
+  ): [ChatMessageFiles!]!
+
+  """An aggregate relationship"""
+  filesAggregate(
+    """distinct select on columns"""
+    distinctOn: [ChatMessageFilesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [ChatMessageFilesOrderBy!]
+
+    """filter the rows returned"""
+    where: ChatMessageFilesBoolExp
+  ): ChatMessageFilesAggregate!
+  frequencyPenalty: numeric
+  id: uuid!
+  model: String
+  presencePenalty: numeric
+  promptTokens: Int!
+  role: String!
+  temperature: numeric
+
+  """An object relationship"""
+  thread: ChatThreads!
+  topP: numeric
+  totalTokens: Int!
+  updatedAt: timestamptz!
+
+  """An object relationship"""
+  user: Users
+  userId: uuid
+}
+
+"""
+aggregated selection of "chat_messages"
+"""
+type ChatMessagesAggregate {
+  aggregate: ChatMessagesAggregateFields
+  nodes: [ChatMessages!]!
+}
+
+input ChatMessagesAggregateBoolExp {
+  count: chatMessagesAggregateBoolExpCount
+}
+
+"""
+aggregate fields of "chat_messages"
+"""
+type ChatMessagesAggregateFields {
+  avg: ChatMessagesAvgFields
+  count(columns: [ChatMessagesSelectColumn!], distinct: Boolean): Int!
+  max: ChatMessagesMaxFields
+  min: ChatMessagesMinFields
+  stddev: ChatMessagesStddevFields
+  stddevPop: ChatMessagesStddevPopFields
+  stddevSamp: ChatMessagesStddevSampFields
+  sum: ChatMessagesSumFields
+  varPop: ChatMessagesVarPopFields
+  varSamp: ChatMessagesVarSampFields
+  variance: ChatMessagesVarianceFields
+}
+
+"""
+order by aggregate values of table "chat_messages"
+"""
+input ChatMessagesAggregateOrderBy {
+  avg: ChatMessagesAvgOrderBy
+  count: OrderBy
+  max: ChatMessagesMaxOrderBy
+  min: ChatMessagesMinOrderBy
+  stddev: ChatMessagesStddevOrderBy
+  stddevPop: ChatMessagesStddevPopOrderBy
+  stddevSamp: ChatMessagesStddevSampOrderBy
+  sum: ChatMessagesSumOrderBy
+  varPop: ChatMessagesVarPopOrderBy
+  varSamp: ChatMessagesVarSampOrderBy
+  variance: ChatMessagesVarianceOrderBy
+}
+
+"""
+input type for inserting array relation for remote table "chat_messages"
+"""
+input ChatMessagesArrRelInsertInput {
+  data: [ChatMessagesInsertInput!]!
+
+  """upsert condition"""
+  onConflict: ChatMessagesOnConflict
+}
+
+"""aggregate avg on columns"""
+type ChatMessagesAvgFields {
+  completionTokens: Float
+  frequencyPenalty: Float
+  presencePenalty: Float
+  promptTokens: Float
+  temperature: Float
+  topP: Float
+  totalTokens: Float
+}
+
+"""
+order by avg() on columns of table "chat_messages"
+"""
+input ChatMessagesAvgOrderBy {
+  completionTokens: OrderBy
+  frequencyPenalty: OrderBy
+  presencePenalty: OrderBy
+  promptTokens: OrderBy
+  temperature: OrderBy
+  topP: OrderBy
+  totalTokens: OrderBy
+}
+
+"""
+Boolean expression to filter rows from the table "chat_messages". All fields are combined with a logical 'AND'.
+"""
+input ChatMessagesBoolExp {
+  _and: [ChatMessagesBoolExp!]
+  _not: ChatMessagesBoolExp
+  _or: [ChatMessagesBoolExp!]
+  archivedAt: TimestamptzComparisonExp
+  chatThreadId: UuidComparisonExp
+  completionTokens: IntComparisonExp
+  content: StringComparisonExp
+  createdAt: TimestamptzComparisonExp
+  deletedAt: TimestamptzComparisonExp
+  files: ChatMessageFilesBoolExp
+  filesAggregate: ChatMessageFilesAggregateBoolExp
+  frequencyPenalty: NumericComparisonExp
+  id: UuidComparisonExp
+  model: StringComparisonExp
+  presencePenalty: NumericComparisonExp
+  promptTokens: IntComparisonExp
+  role: StringComparisonExp
+  temperature: NumericComparisonExp
+  thread: ChatThreadsBoolExp
+  topP: NumericComparisonExp
+  totalTokens: IntComparisonExp
+  updatedAt: TimestamptzComparisonExp
+  user: UsersBoolExp
+  userId: UuidComparisonExp
+}
+
+"""
+unique or primary key constraints on table "chat_messages"
+"""
+enum ChatMessagesConstraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  chat_messages_pkey
+}
+
+"""
+input type for incrementing numeric columns in table "chat_messages"
+"""
+input ChatMessagesIncInput {
+  completionTokens: Int
+  frequencyPenalty: numeric
+  presencePenalty: numeric
+  promptTokens: Int
+  temperature: numeric
+  topP: numeric
+  totalTokens: Int
+}
+
+"""
+input type for inserting data into table "chat_messages"
+"""
+input ChatMessagesInsertInput {
+  archivedAt: timestamptz
+  chatThreadId: uuid
+  completionTokens: Int
+  content: String
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  files: ChatMessageFilesArrRelInsertInput
+  frequencyPenalty: numeric
+  id: uuid
+  model: String
+  presencePenalty: numeric
+  promptTokens: Int
+  role: String
+  temperature: numeric
+  thread: ChatThreadsObjRelInsertInput
+  topP: numeric
+  totalTokens: Int
+  updatedAt: timestamptz
+  user: UsersObjRelInsertInput
+  userId: uuid
+}
+
+"""aggregate max on columns"""
+type ChatMessagesMaxFields {
+  archivedAt: timestamptz
+  chatThreadId: uuid
+  completionTokens: Int
+  content: String
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  frequencyPenalty: numeric
+  id: uuid
+  model: String
+  presencePenalty: numeric
+  promptTokens: Int
+  role: String
+  temperature: numeric
+  topP: numeric
+  totalTokens: Int
+  updatedAt: timestamptz
+  userId: uuid
+}
+
+"""
+order by max() on columns of table "chat_messages"
+"""
+input ChatMessagesMaxOrderBy {
+  archivedAt: OrderBy
+  chatThreadId: OrderBy
+  completionTokens: OrderBy
+  content: OrderBy
+  createdAt: OrderBy
+  deletedAt: OrderBy
+  frequencyPenalty: OrderBy
+  id: OrderBy
+  model: OrderBy
+  presencePenalty: OrderBy
+  promptTokens: OrderBy
+  role: OrderBy
+  temperature: OrderBy
+  topP: OrderBy
+  totalTokens: OrderBy
+  updatedAt: OrderBy
+  userId: OrderBy
+}
+
+"""aggregate min on columns"""
+type ChatMessagesMinFields {
+  archivedAt: timestamptz
+  chatThreadId: uuid
+  completionTokens: Int
+  content: String
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  frequencyPenalty: numeric
+  id: uuid
+  model: String
+  presencePenalty: numeric
+  promptTokens: Int
+  role: String
+  temperature: numeric
+  topP: numeric
+  totalTokens: Int
+  updatedAt: timestamptz
+  userId: uuid
+}
+
+"""
+order by min() on columns of table "chat_messages"
+"""
+input ChatMessagesMinOrderBy {
+  archivedAt: OrderBy
+  chatThreadId: OrderBy
+  completionTokens: OrderBy
+  content: OrderBy
+  createdAt: OrderBy
+  deletedAt: OrderBy
+  frequencyPenalty: OrderBy
+  id: OrderBy
+  model: OrderBy
+  presencePenalty: OrderBy
+  promptTokens: OrderBy
+  role: OrderBy
+  temperature: OrderBy
+  topP: OrderBy
+  totalTokens: OrderBy
+  updatedAt: OrderBy
+  userId: OrderBy
+}
+
+"""
+response of any mutation on the table "chat_messages"
+"""
+type ChatMessagesMutationResponse {
+  """number of rows affected by the mutation"""
+  affectedRows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [ChatMessages!]!
+}
+
+"""
+input type for inserting object relation for remote table "chat_messages"
+"""
+input ChatMessagesObjRelInsertInput {
+  data: ChatMessagesInsertInput!
+
+  """upsert condition"""
+  onConflict: ChatMessagesOnConflict
+}
+
+"""
+on_conflict condition type for table "chat_messages"
+"""
+input ChatMessagesOnConflict {
+  constraint: ChatMessagesConstraint!
+  updateColumns: [ChatMessagesUpdateColumn!]! = []
+  where: ChatMessagesBoolExp
+}
+
+"""Ordering options when selecting data from "chat_messages"."""
+input ChatMessagesOrderBy {
+  archivedAt: OrderBy
+  chatThreadId: OrderBy
+  completionTokens: OrderBy
+  content: OrderBy
+  createdAt: OrderBy
+  deletedAt: OrderBy
+  filesAggregate: ChatMessageFilesAggregateOrderBy
+  frequencyPenalty: OrderBy
+  id: OrderBy
+  model: OrderBy
+  presencePenalty: OrderBy
+  promptTokens: OrderBy
+  role: OrderBy
+  temperature: OrderBy
+  thread: ChatThreadsOrderBy
+  topP: OrderBy
+  totalTokens: OrderBy
+  updatedAt: OrderBy
+  user: UsersOrderBy
+  userId: OrderBy
+}
+
+"""primary key columns input for table: chat_messages"""
+input ChatMessagesPkColumnsInput {
+  id: uuid!
+}
+
+"""
+select columns of table "chat_messages"
+"""
+enum ChatMessagesSelectColumn {
+  """column name"""
+  archivedAt
+
+  """column name"""
+  chatThreadId
+
+  """column name"""
+  completionTokens
+
+  """column name"""
+  content
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  deletedAt
+
+  """column name"""
+  frequencyPenalty
+
+  """column name"""
+  id
+
+  """column name"""
+  model
+
+  """column name"""
+  presencePenalty
+
+  """column name"""
+  promptTokens
+
+  """column name"""
+  role
+
+  """column name"""
+  temperature
+
+  """column name"""
+  topP
+
+  """column name"""
+  totalTokens
+
+  """column name"""
+  updatedAt
+
+  """column name"""
+  userId
+}
+
+"""
+input type for updating data in table "chat_messages"
+"""
+input ChatMessagesSetInput {
+  archivedAt: timestamptz
+  chatThreadId: uuid
+  completionTokens: Int
+  content: String
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  frequencyPenalty: numeric
+  id: uuid
+  model: String
+  presencePenalty: numeric
+  promptTokens: Int
+  role: String
+  temperature: numeric
+  topP: numeric
+  totalTokens: Int
+  updatedAt: timestamptz
+  userId: uuid
+}
+
+"""aggregate stddev on columns"""
+type ChatMessagesStddevFields {
+  completionTokens: Float
+  frequencyPenalty: Float
+  presencePenalty: Float
+  promptTokens: Float
+  temperature: Float
+  topP: Float
+  totalTokens: Float
+}
+
+"""
+order by stddev() on columns of table "chat_messages"
+"""
+input ChatMessagesStddevOrderBy {
+  completionTokens: OrderBy
+  frequencyPenalty: OrderBy
+  presencePenalty: OrderBy
+  promptTokens: OrderBy
+  temperature: OrderBy
+  topP: OrderBy
+  totalTokens: OrderBy
+}
+
+"""aggregate stddevPop on columns"""
+type ChatMessagesStddevPopFields {
+  completionTokens: Float
+  frequencyPenalty: Float
+  presencePenalty: Float
+  promptTokens: Float
+  temperature: Float
+  topP: Float
+  totalTokens: Float
+}
+
+"""
+order by stddevPop() on columns of table "chat_messages"
+"""
+input ChatMessagesStddevPopOrderBy {
+  completionTokens: OrderBy
+  frequencyPenalty: OrderBy
+  presencePenalty: OrderBy
+  promptTokens: OrderBy
+  temperature: OrderBy
+  topP: OrderBy
+  totalTokens: OrderBy
+}
+
+"""aggregate stddevSamp on columns"""
+type ChatMessagesStddevSampFields {
+  completionTokens: Float
+  frequencyPenalty: Float
+  presencePenalty: Float
+  promptTokens: Float
+  temperature: Float
+  topP: Float
+  totalTokens: Float
+}
+
+"""
+order by stddevSamp() on columns of table "chat_messages"
+"""
+input ChatMessagesStddevSampOrderBy {
+  completionTokens: OrderBy
+  frequencyPenalty: OrderBy
+  presencePenalty: OrderBy
+  promptTokens: OrderBy
+  temperature: OrderBy
+  topP: OrderBy
+  totalTokens: OrderBy
+}
+
+"""
+Streaming cursor of the table "chat_messages"
+"""
+input ChatMessagesStreamCursorInput {
+  """Stream column input with initial value"""
+  initialValue: ChatMessagesStreamCursorValueInput!
+
+  """cursor ordering"""
+  ordering: CursorOrdering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input ChatMessagesStreamCursorValueInput {
+  archivedAt: timestamptz
+  chatThreadId: uuid
+  completionTokens: Int
+  content: String
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  frequencyPenalty: numeric
+  id: uuid
+  model: String
+  presencePenalty: numeric
+  promptTokens: Int
+  role: String
+  temperature: numeric
+  topP: numeric
+  totalTokens: Int
+  updatedAt: timestamptz
+  userId: uuid
+}
+
+"""aggregate sum on columns"""
+type ChatMessagesSumFields {
+  completionTokens: Int
+  frequencyPenalty: numeric
+  presencePenalty: numeric
+  promptTokens: Int
+  temperature: numeric
+  topP: numeric
+  totalTokens: Int
+}
+
+"""
+order by sum() on columns of table "chat_messages"
+"""
+input ChatMessagesSumOrderBy {
+  completionTokens: OrderBy
+  frequencyPenalty: OrderBy
+  presencePenalty: OrderBy
+  promptTokens: OrderBy
+  temperature: OrderBy
+  topP: OrderBy
+  totalTokens: OrderBy
+}
+
+"""
+update columns of table "chat_messages"
+"""
+enum ChatMessagesUpdateColumn {
+  """column name"""
+  archivedAt
+
+  """column name"""
+  chatThreadId
+
+  """column name"""
+  completionTokens
+
+  """column name"""
+  content
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  deletedAt
+
+  """column name"""
+  frequencyPenalty
+
+  """column name"""
+  id
+
+  """column name"""
+  model
+
+  """column name"""
+  presencePenalty
+
+  """column name"""
+  promptTokens
+
+  """column name"""
+  role
+
+  """column name"""
+  temperature
+
+  """column name"""
+  topP
+
+  """column name"""
+  totalTokens
+
+  """column name"""
+  updatedAt
+
+  """column name"""
+  userId
+}
+
+input ChatMessagesUpdates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: ChatMessagesIncInput
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: ChatMessagesSetInput
+
+  """filter the rows which have to be updated"""
+  where: ChatMessagesBoolExp!
+}
+
+"""aggregate varPop on columns"""
+type ChatMessagesVarPopFields {
+  completionTokens: Float
+  frequencyPenalty: Float
+  presencePenalty: Float
+  promptTokens: Float
+  temperature: Float
+  topP: Float
+  totalTokens: Float
+}
+
+"""
+order by varPop() on columns of table "chat_messages"
+"""
+input ChatMessagesVarPopOrderBy {
+  completionTokens: OrderBy
+  frequencyPenalty: OrderBy
+  presencePenalty: OrderBy
+  promptTokens: OrderBy
+  temperature: OrderBy
+  topP: OrderBy
+  totalTokens: OrderBy
+}
+
+"""aggregate varSamp on columns"""
+type ChatMessagesVarSampFields {
+  completionTokens: Float
+  frequencyPenalty: Float
+  presencePenalty: Float
+  promptTokens: Float
+  temperature: Float
+  topP: Float
+  totalTokens: Float
+}
+
+"""
+order by varSamp() on columns of table "chat_messages"
+"""
+input ChatMessagesVarSampOrderBy {
+  completionTokens: OrderBy
+  frequencyPenalty: OrderBy
+  presencePenalty: OrderBy
+  promptTokens: OrderBy
+  temperature: OrderBy
+  topP: OrderBy
+  totalTokens: OrderBy
+}
+
+"""aggregate variance on columns"""
+type ChatMessagesVarianceFields {
+  completionTokens: Float
+  frequencyPenalty: Float
+  presencePenalty: Float
+  promptTokens: Float
+  temperature: Float
+  topP: Float
+  totalTokens: Float
+}
+
+"""
+order by variance() on columns of table "chat_messages"
+"""
+input ChatMessagesVarianceOrderBy {
+  completionTokens: OrderBy
+  frequencyPenalty: OrderBy
+  presencePenalty: OrderBy
+  promptTokens: OrderBy
+  temperature: OrderBy
+  topP: OrderBy
+  totalTokens: OrderBy
+}
+
+"""
+columns and relationships of "chat_threads"
+"""
+type ChatThreads {
+  archivedAt: timestamptz
+
+  """An object relationship"""
+  breadEntry: BreadEntries
+  breadEntryId: uuid
+  createdAt: timestamptz!
+  deletedAt: timestamptz
+  id: uuid!
+
+  """An array relationship"""
+  messages(
+    """distinct select on columns"""
+    distinctOn: [ChatMessagesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [ChatMessagesOrderBy!]
+
+    """filter the rows returned"""
+    where: ChatMessagesBoolExp
+  ): [ChatMessages!]!
+
+  """An aggregate relationship"""
+  messagesAggregate(
+    """distinct select on columns"""
+    distinctOn: [ChatMessagesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [ChatMessagesOrderBy!]
+
+    """filter the rows returned"""
+    where: ChatMessagesBoolExp
+  ): ChatMessagesAggregate!
+  title: String!
+  updatedAt: timestamptz!
+
+  """An object relationship"""
+  user: Users!
+  userId: uuid!
+}
+
+"""
+aggregated selection of "chat_threads"
+"""
+type ChatThreadsAggregate {
+  aggregate: ChatThreadsAggregateFields
+  nodes: [ChatThreads!]!
+}
+
+"""
+aggregate fields of "chat_threads"
+"""
+type ChatThreadsAggregateFields {
+  count(columns: [ChatThreadsSelectColumn!], distinct: Boolean): Int!
+  max: ChatThreadsMaxFields
+  min: ChatThreadsMinFields
+}
+
+"""
+Boolean expression to filter rows from the table "chat_threads". All fields are combined with a logical 'AND'.
+"""
+input ChatThreadsBoolExp {
+  _and: [ChatThreadsBoolExp!]
+  _not: ChatThreadsBoolExp
+  _or: [ChatThreadsBoolExp!]
+  archivedAt: TimestamptzComparisonExp
+  breadEntry: BreadEntriesBoolExp
+  breadEntryId: UuidComparisonExp
+  createdAt: TimestamptzComparisonExp
+  deletedAt: TimestamptzComparisonExp
+  id: UuidComparisonExp
+  messages: ChatMessagesBoolExp
+  messagesAggregate: ChatMessagesAggregateBoolExp
+  title: StringComparisonExp
+  updatedAt: TimestamptzComparisonExp
+  user: UsersBoolExp
+  userId: UuidComparisonExp
+}
+
+"""
+unique or primary key constraints on table "chat_threads"
+"""
+enum ChatThreadsConstraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  chat_threads_pkey
+}
+
+"""
+input type for inserting data into table "chat_threads"
+"""
+input ChatThreadsInsertInput {
+  archivedAt: timestamptz
+  breadEntry: BreadEntriesObjRelInsertInput
+  breadEntryId: uuid
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  id: uuid
+  messages: ChatMessagesArrRelInsertInput
+  title: String
+  updatedAt: timestamptz
+  user: UsersObjRelInsertInput
+  userId: uuid
+}
+
+"""aggregate max on columns"""
+type ChatThreadsMaxFields {
+  archivedAt: timestamptz
+  breadEntryId: uuid
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  id: uuid
+  title: String
+  updatedAt: timestamptz
+  userId: uuid
+}
+
+"""aggregate min on columns"""
+type ChatThreadsMinFields {
+  archivedAt: timestamptz
+  breadEntryId: uuid
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  id: uuid
+  title: String
+  updatedAt: timestamptz
+  userId: uuid
+}
+
+"""
+response of any mutation on the table "chat_threads"
+"""
+type ChatThreadsMutationResponse {
+  """number of rows affected by the mutation"""
+  affectedRows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [ChatThreads!]!
+}
+
+"""
+input type for inserting object relation for remote table "chat_threads"
+"""
+input ChatThreadsObjRelInsertInput {
+  data: ChatThreadsInsertInput!
+
+  """upsert condition"""
+  onConflict: ChatThreadsOnConflict
+}
+
+"""
+on_conflict condition type for table "chat_threads"
+"""
+input ChatThreadsOnConflict {
+  constraint: ChatThreadsConstraint!
+  updateColumns: [ChatThreadsUpdateColumn!]! = []
+  where: ChatThreadsBoolExp
+}
+
+"""Ordering options when selecting data from "chat_threads"."""
+input ChatThreadsOrderBy {
+  archivedAt: OrderBy
+  breadEntry: BreadEntriesOrderBy
+  breadEntryId: OrderBy
+  createdAt: OrderBy
+  deletedAt: OrderBy
+  id: OrderBy
+  messagesAggregate: ChatMessagesAggregateOrderBy
+  title: OrderBy
+  updatedAt: OrderBy
+  user: UsersOrderBy
+  userId: OrderBy
+}
+
+"""primary key columns input for table: chat_threads"""
+input ChatThreadsPkColumnsInput {
+  id: uuid!
+}
+
+"""
+select columns of table "chat_threads"
+"""
+enum ChatThreadsSelectColumn {
+  """column name"""
+  archivedAt
+
+  """column name"""
+  breadEntryId
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  deletedAt
+
+  """column name"""
+  id
+
+  """column name"""
+  title
+
+  """column name"""
+  updatedAt
+
+  """column name"""
+  userId
+}
+
+"""
+input type for updating data in table "chat_threads"
+"""
+input ChatThreadsSetInput {
+  archivedAt: timestamptz
+  breadEntryId: uuid
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  id: uuid
+  title: String
+  updatedAt: timestamptz
+  userId: uuid
+}
+
+"""
+Streaming cursor of the table "chat_threads"
+"""
+input ChatThreadsStreamCursorInput {
+  """Stream column input with initial value"""
+  initialValue: ChatThreadsStreamCursorValueInput!
+
+  """cursor ordering"""
+  ordering: CursorOrdering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input ChatThreadsStreamCursorValueInput {
+  archivedAt: timestamptz
+  breadEntryId: uuid
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  id: uuid
+  title: String
+  updatedAt: timestamptz
+  userId: uuid
+}
+
+"""
+update columns of table "chat_threads"
+"""
+enum ChatThreadsUpdateColumn {
+  """column name"""
+  archivedAt
+
+  """column name"""
+  breadEntryId
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  deletedAt
+
+  """column name"""
+  id
+
+  """column name"""
+  title
+
+  """column name"""
+  updatedAt
+
+  """column name"""
+  userId
+}
+
+input ChatThreadsUpdates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: ChatThreadsSetInput
+
+  """filter the rows which have to be updated"""
+  where: ChatThreadsBoolExp!
+}
+
+"""ordering argument of a cursor"""
+enum CursorOrdering {
+  """ascending ordering of the cursor"""
+  ASC
+
+  """descending ordering of the cursor"""
+  DESC
+}
+
+"""
+Boolean expression to compare columns of type "date". All fields are combined with logical 'AND'.
+"""
+input DateComparisonExp {
+  _eq: date
+  _gt: date
+  _gte: date
+  _in: [date!]
+  _isNull: Boolean
+  _lt: date
+  _lte: date
+  _neq: date
+  _nin: [date!]
+}
+
+"""
+Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'.
+"""
+input IntComparisonExp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _isNull: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
+Boolean expression to compare columns of type "numeric". All fields are combined with logical 'AND'.
+"""
+input NumericComparisonExp {
+  _eq: numeric
+  _gt: numeric
+  _gte: numeric
+  _in: [numeric!]
+  _isNull: Boolean
+  _lt: numeric
+  _lte: numeric
+  _neq: numeric
+  _nin: [numeric!]
+}
+
+"""column ordering options"""
+enum OrderBy {
+  """in ascending order, nulls last"""
+  ASC
+
+  """in ascending order, nulls first"""
+  ASC_NULLS_FIRST
+
+  """in ascending order, nulls last"""
+  ASC_NULLS_LAST
+
+  """in descending order, nulls first"""
+  DESC
+
+  """in descending order, nulls first"""
+  DESC_NULLS_FIRST
+
+  """in descending order, nulls last"""
+  DESC_NULLS_LAST
+}
+
+"""
+columns and relationships of "recipe_notes"
+"""
+type RecipeNotes {
+  archivedAt: timestamptz
+  content: String!
+  createdAt: timestamptz!
+  deletedAt: timestamptz
+  id: uuid!
+
+  """An object relationship"""
+  recipe: Recipes!
+  recipeId: uuid!
+  updatedAt: timestamptz!
+
+  """An object relationship"""
+  user: Users!
+  userId: uuid!
+}
+
+"""
+aggregated selection of "recipe_notes"
+"""
+type RecipeNotesAggregate {
+  aggregate: RecipeNotesAggregateFields
+  nodes: [RecipeNotes!]!
+}
+
+input RecipeNotesAggregateBoolExp {
+  count: recipeNotesAggregateBoolExpCount
+}
+
+"""
+aggregate fields of "recipe_notes"
+"""
+type RecipeNotesAggregateFields {
+  count(columns: [RecipeNotesSelectColumn!], distinct: Boolean): Int!
+  max: RecipeNotesMaxFields
+  min: RecipeNotesMinFields
+}
+
+"""
+order by aggregate values of table "recipe_notes"
+"""
+input RecipeNotesAggregateOrderBy {
+  count: OrderBy
+  max: RecipeNotesMaxOrderBy
+  min: RecipeNotesMinOrderBy
+}
+
+"""
+input type for inserting array relation for remote table "recipe_notes"
+"""
+input RecipeNotesArrRelInsertInput {
+  data: [RecipeNotesInsertInput!]!
+
+  """upsert condition"""
+  onConflict: RecipeNotesOnConflict
+}
+
+"""
+Boolean expression to filter rows from the table "recipe_notes". All fields are combined with a logical 'AND'.
+"""
+input RecipeNotesBoolExp {
+  _and: [RecipeNotesBoolExp!]
+  _not: RecipeNotesBoolExp
+  _or: [RecipeNotesBoolExp!]
+  archivedAt: TimestamptzComparisonExp
+  content: StringComparisonExp
+  createdAt: TimestamptzComparisonExp
+  deletedAt: TimestamptzComparisonExp
+  id: UuidComparisonExp
+  recipe: RecipesBoolExp
+  recipeId: UuidComparisonExp
+  updatedAt: TimestamptzComparisonExp
+  user: UsersBoolExp
+  userId: UuidComparisonExp
+}
+
+"""
+unique or primary key constraints on table "recipe_notes"
+"""
+enum RecipeNotesConstraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  recipe_notes_pkey
+}
+
+"""
+input type for inserting data into table "recipe_notes"
+"""
+input RecipeNotesInsertInput {
+  archivedAt: timestamptz
+  content: String
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  id: uuid
+  recipe: RecipesObjRelInsertInput
+  recipeId: uuid
+  updatedAt: timestamptz
+  user: UsersObjRelInsertInput
+  userId: uuid
+}
+
+"""aggregate max on columns"""
+type RecipeNotesMaxFields {
+  archivedAt: timestamptz
+  content: String
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  id: uuid
+  recipeId: uuid
+  updatedAt: timestamptz
+  userId: uuid
+}
+
+"""
+order by max() on columns of table "recipe_notes"
+"""
+input RecipeNotesMaxOrderBy {
+  archivedAt: OrderBy
+  content: OrderBy
+  createdAt: OrderBy
+  deletedAt: OrderBy
+  id: OrderBy
+  recipeId: OrderBy
+  updatedAt: OrderBy
+  userId: OrderBy
+}
+
+"""aggregate min on columns"""
+type RecipeNotesMinFields {
+  archivedAt: timestamptz
+  content: String
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  id: uuid
+  recipeId: uuid
+  updatedAt: timestamptz
+  userId: uuid
+}
+
+"""
+order by min() on columns of table "recipe_notes"
+"""
+input RecipeNotesMinOrderBy {
+  archivedAt: OrderBy
+  content: OrderBy
+  createdAt: OrderBy
+  deletedAt: OrderBy
+  id: OrderBy
+  recipeId: OrderBy
+  updatedAt: OrderBy
+  userId: OrderBy
+}
+
+"""
+response of any mutation on the table "recipe_notes"
+"""
+type RecipeNotesMutationResponse {
+  """number of rows affected by the mutation"""
+  affectedRows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [RecipeNotes!]!
+}
+
+"""
+on_conflict condition type for table "recipe_notes"
+"""
+input RecipeNotesOnConflict {
+  constraint: RecipeNotesConstraint!
+  updateColumns: [RecipeNotesUpdateColumn!]! = []
+  where: RecipeNotesBoolExp
+}
+
+"""Ordering options when selecting data from "recipe_notes"."""
+input RecipeNotesOrderBy {
+  archivedAt: OrderBy
+  content: OrderBy
+  createdAt: OrderBy
+  deletedAt: OrderBy
+  id: OrderBy
+  recipe: RecipesOrderBy
+  recipeId: OrderBy
+  updatedAt: OrderBy
+  user: UsersOrderBy
+  userId: OrderBy
+}
+
+"""primary key columns input for table: recipe_notes"""
+input RecipeNotesPkColumnsInput {
+  id: uuid!
+}
+
+"""
+select columns of table "recipe_notes"
+"""
+enum RecipeNotesSelectColumn {
+  """column name"""
+  archivedAt
+
+  """column name"""
+  content
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  deletedAt
+
+  """column name"""
+  id
+
+  """column name"""
+  recipeId
+
+  """column name"""
+  updatedAt
+
+  """column name"""
+  userId
+}
+
+"""
+input type for updating data in table "recipe_notes"
+"""
+input RecipeNotesSetInput {
+  archivedAt: timestamptz
+  content: String
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  id: uuid
+  recipeId: uuid
+  updatedAt: timestamptz
+  userId: uuid
+}
+
+"""
+Streaming cursor of the table "recipe_notes"
+"""
+input RecipeNotesStreamCursorInput {
+  """Stream column input with initial value"""
+  initialValue: RecipeNotesStreamCursorValueInput!
+
+  """cursor ordering"""
+  ordering: CursorOrdering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input RecipeNotesStreamCursorValueInput {
+  archivedAt: timestamptz
+  content: String
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  id: uuid
+  recipeId: uuid
+  updatedAt: timestamptz
+  userId: uuid
+}
+
+"""
+update columns of table "recipe_notes"
+"""
+enum RecipeNotesUpdateColumn {
+  """column name"""
+  archivedAt
+
+  """column name"""
+  content
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  deletedAt
+
+  """column name"""
+  id
+
+  """column name"""
+  recipeId
+
+  """column name"""
+  updatedAt
+
+  """column name"""
+  userId
+}
+
+input RecipeNotesUpdates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: RecipeNotesSetInput
+
+  """filter the rows which have to be updated"""
+  where: RecipeNotesBoolExp!
+}
+
+"""
+columns and relationships of "recipes"
+"""
+type Recipes {
+  archivedAt: timestamptz
+
+  """An array relationship"""
+  breadEntries(
+    """distinct select on columns"""
+    distinctOn: [BreadEntriesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [BreadEntriesOrderBy!]
+
+    """filter the rows returned"""
+    where: BreadEntriesBoolExp
+  ): [BreadEntries!]!
+
+  """An aggregate relationship"""
+  breadEntriesAggregate(
+    """distinct select on columns"""
+    distinctOn: [BreadEntriesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [BreadEntriesOrderBy!]
+
+    """filter the rows returned"""
+    where: BreadEntriesBoolExp
+  ): BreadEntriesAggregate!
+  createdAt: timestamptz!
+  deletedAt: timestamptz
+  flour: String!
+  id: uuid!
+  ingredients: String!
+  instructions: String!
+  lastUsedAt: timestamptz!
+  name: String!
+
+  """An array relationship"""
+  notes(
+    """distinct select on columns"""
+    distinctOn: [RecipeNotesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [RecipeNotesOrderBy!]
+
+    """filter the rows returned"""
+    where: RecipeNotesBoolExp
+  ): [RecipeNotes!]!
+
+  """An aggregate relationship"""
+  notesAggregate(
+    """distinct select on columns"""
+    distinctOn: [RecipeNotesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [RecipeNotesOrderBy!]
+
+    """filter the rows returned"""
+    where: RecipeNotesBoolExp
+  ): RecipeNotesAggregate!
+  remarks: String!
+  salt: String!
+  updatedAt: timestamptz!
+  url: String!
+
+  """An object relationship"""
+  user: Users
+  userId: uuid
+  water: String!
+}
+
+"""
+aggregated selection of "recipes"
+"""
+type RecipesAggregate {
+  aggregate: RecipesAggregateFields
+  nodes: [Recipes!]!
+}
+
+input RecipesAggregateBoolExp {
+  count: recipesAggregateBoolExpCount
+}
+
+"""
+aggregate fields of "recipes"
+"""
+type RecipesAggregateFields {
+  count(columns: [RecipesSelectColumn!], distinct: Boolean): Int!
+  max: RecipesMaxFields
+  min: RecipesMinFields
+}
+
+"""
+order by aggregate values of table "recipes"
+"""
+input RecipesAggregateOrderBy {
+  count: OrderBy
+  max: RecipesMaxOrderBy
+  min: RecipesMinOrderBy
+}
+
+"""
+input type for inserting array relation for remote table "recipes"
+"""
+input RecipesArrRelInsertInput {
+  data: [RecipesInsertInput!]!
+
+  """upsert condition"""
+  onConflict: RecipesOnConflict
+}
+
+"""
+Boolean expression to filter rows from the table "recipes". All fields are combined with a logical 'AND'.
+"""
+input RecipesBoolExp {
+  _and: [RecipesBoolExp!]
+  _not: RecipesBoolExp
+  _or: [RecipesBoolExp!]
+  archivedAt: TimestamptzComparisonExp
+  breadEntries: BreadEntriesBoolExp
+  breadEntriesAggregate: BreadEntriesAggregateBoolExp
+  createdAt: TimestamptzComparisonExp
+  deletedAt: TimestamptzComparisonExp
+  flour: StringComparisonExp
+  id: UuidComparisonExp
+  ingredients: StringComparisonExp
+  instructions: StringComparisonExp
+  lastUsedAt: TimestamptzComparisonExp
+  name: StringComparisonExp
+  notes: RecipeNotesBoolExp
+  notesAggregate: RecipeNotesAggregateBoolExp
+  remarks: StringComparisonExp
+  salt: StringComparisonExp
+  updatedAt: TimestamptzComparisonExp
+  url: StringComparisonExp
+  user: UsersBoolExp
+  userId: UuidComparisonExp
+  water: StringComparisonExp
+}
+
+"""
+unique or primary key constraints on table "recipes"
+"""
+enum RecipesConstraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  recipes_pkey
+}
+
+"""
+input type for inserting data into table "recipes"
+"""
+input RecipesInsertInput {
+  archivedAt: timestamptz
+  breadEntries: BreadEntriesArrRelInsertInput
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  flour: String
+  id: uuid
+  ingredients: String
+  instructions: String
+  lastUsedAt: timestamptz
+  name: String
+  notes: RecipeNotesArrRelInsertInput
+  remarks: String
+  salt: String
+  updatedAt: timestamptz
+  url: String
+  user: UsersObjRelInsertInput
+  userId: uuid
+  water: String
+}
+
+"""aggregate max on columns"""
+type RecipesMaxFields {
+  archivedAt: timestamptz
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  flour: String
+  id: uuid
+  ingredients: String
+  instructions: String
+  lastUsedAt: timestamptz
+  name: String
+  remarks: String
+  salt: String
+  updatedAt: timestamptz
+  url: String
+  userId: uuid
+  water: String
+}
+
+"""
+order by max() on columns of table "recipes"
+"""
+input RecipesMaxOrderBy {
+  archivedAt: OrderBy
+  createdAt: OrderBy
+  deletedAt: OrderBy
+  flour: OrderBy
+  id: OrderBy
+  ingredients: OrderBy
+  instructions: OrderBy
+  lastUsedAt: OrderBy
+  name: OrderBy
+  remarks: OrderBy
+  salt: OrderBy
+  updatedAt: OrderBy
+  url: OrderBy
+  userId: OrderBy
+  water: OrderBy
+}
+
+"""aggregate min on columns"""
+type RecipesMinFields {
+  archivedAt: timestamptz
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  flour: String
+  id: uuid
+  ingredients: String
+  instructions: String
+  lastUsedAt: timestamptz
+  name: String
+  remarks: String
+  salt: String
+  updatedAt: timestamptz
+  url: String
+  userId: uuid
+  water: String
+}
+
+"""
+order by min() on columns of table "recipes"
+"""
+input RecipesMinOrderBy {
+  archivedAt: OrderBy
+  createdAt: OrderBy
+  deletedAt: OrderBy
+  flour: OrderBy
+  id: OrderBy
+  ingredients: OrderBy
+  instructions: OrderBy
+  lastUsedAt: OrderBy
+  name: OrderBy
+  remarks: OrderBy
+  salt: OrderBy
+  updatedAt: OrderBy
+  url: OrderBy
+  userId: OrderBy
+  water: OrderBy
+}
+
+"""
+response of any mutation on the table "recipes"
+"""
+type RecipesMutationResponse {
+  """number of rows affected by the mutation"""
+  affectedRows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [Recipes!]!
+}
+
+"""
+input type for inserting object relation for remote table "recipes"
+"""
+input RecipesObjRelInsertInput {
+  data: RecipesInsertInput!
+
+  """upsert condition"""
+  onConflict: RecipesOnConflict
+}
+
+"""
+on_conflict condition type for table "recipes"
+"""
+input RecipesOnConflict {
+  constraint: RecipesConstraint!
+  updateColumns: [RecipesUpdateColumn!]! = []
+  where: RecipesBoolExp
+}
+
+"""Ordering options when selecting data from "recipes"."""
+input RecipesOrderBy {
+  archivedAt: OrderBy
+  breadEntriesAggregate: BreadEntriesAggregateOrderBy
+  createdAt: OrderBy
+  deletedAt: OrderBy
+  flour: OrderBy
+  id: OrderBy
+  ingredients: OrderBy
+  instructions: OrderBy
+  lastUsedAt: OrderBy
+  name: OrderBy
+  notesAggregate: RecipeNotesAggregateOrderBy
+  remarks: OrderBy
+  salt: OrderBy
+  updatedAt: OrderBy
+  url: OrderBy
+  user: UsersOrderBy
+  userId: OrderBy
+  water: OrderBy
+}
+
+"""primary key columns input for table: recipes"""
+input RecipesPkColumnsInput {
+  id: uuid!
+}
+
+"""
+select columns of table "recipes"
+"""
+enum RecipesSelectColumn {
+  """column name"""
+  archivedAt
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  deletedAt
+
+  """column name"""
+  flour
+
+  """column name"""
+  id
+
+  """column name"""
+  ingredients
+
+  """column name"""
+  instructions
+
+  """column name"""
+  lastUsedAt
+
+  """column name"""
+  name
+
+  """column name"""
+  remarks
+
+  """column name"""
+  salt
+
+  """column name"""
+  updatedAt
+
+  """column name"""
+  url
+
+  """column name"""
+  userId
+
+  """column name"""
+  water
+}
+
+"""
+input type for updating data in table "recipes"
+"""
+input RecipesSetInput {
+  archivedAt: timestamptz
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  flour: String
+  id: uuid
+  ingredients: String
+  instructions: String
+  lastUsedAt: timestamptz
+  name: String
+  remarks: String
+  salt: String
+  updatedAt: timestamptz
+  url: String
+  userId: uuid
+  water: String
+}
+
+"""
+Streaming cursor of the table "recipes"
+"""
+input RecipesStreamCursorInput {
+  """Stream column input with initial value"""
+  initialValue: RecipesStreamCursorValueInput!
+
+  """cursor ordering"""
+  ordering: CursorOrdering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input RecipesStreamCursorValueInput {
+  archivedAt: timestamptz
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  flour: String
+  id: uuid
+  ingredients: String
+  instructions: String
+  lastUsedAt: timestamptz
+  name: String
+  remarks: String
+  salt: String
+  updatedAt: timestamptz
+  url: String
+  userId: uuid
+  water: String
+}
+
+"""
+update columns of table "recipes"
+"""
+enum RecipesUpdateColumn {
+  """column name"""
+  archivedAt
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  deletedAt
+
+  """column name"""
+  flour
+
+  """column name"""
+  id
+
+  """column name"""
+  ingredients
+
+  """column name"""
+  instructions
+
+  """column name"""
+  lastUsedAt
+
+  """column name"""
+  name
+
+  """column name"""
+  remarks
+
+  """column name"""
+  salt
+
+  """column name"""
+  updatedAt
+
+  """column name"""
+  url
+
+  """column name"""
+  userId
+
+  """column name"""
+  water
+}
+
+input RecipesUpdates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: RecipesSetInput
+
+  """filter the rows which have to be updated"""
+  where: RecipesBoolExp!
+}
+
+"""
+Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'.
+"""
+input StringComparisonExp {
+  _eq: String
+  _gt: String
+  _gte: String
+
+  """does the column match the given case-insensitive pattern"""
+  _ilike: String
+  _in: [String!]
+
+  """
+  does the column match the given POSIX regular expression, case insensitive
+  """
+  _iregex: String
+  _isNull: Boolean
+
+  """does the column match the given pattern"""
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+
+  """does the column NOT match the given case-insensitive pattern"""
+  _nilike: String
+  _nin: [String!]
+
+  """
+  does the column NOT match the given POSIX regular expression, case insensitive
+  """
+  _niregex: String
+
+  """does the column NOT match the given pattern"""
+  _nlike: String
+
+  """
+  does the column NOT match the given POSIX regular expression, case sensitive
+  """
+  _nregex: String
+
+  """does the column NOT match the given SQL regular expression"""
+  _nsimilar: String
+
+  """
+  does the column match the given POSIX regular expression, case sensitive
+  """
+  _regex: String
+
+  """does the column match the given SQL regular expression"""
+  _similar: String
+}
+
+"""
+Boolean expression to compare columns of type "timestamptz". All fields are combined with logical 'AND'.
+"""
+input TimestamptzComparisonExp {
+  _eq: timestamptz
+  _gt: timestamptz
+  _gte: timestamptz
+  _in: [timestamptz!]
+  _isNull: Boolean
+  _lt: timestamptz
+  _lte: timestamptz
+  _neq: timestamptz
+  _nin: [timestamptz!]
+}
+
+"""
+columns and relationships of "users"
+"""
+type Users {
+  birthDate: date
+
+  """An array relationship"""
+  breadEntries(
+    """distinct select on columns"""
+    distinctOn: [BreadEntriesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [BreadEntriesOrderBy!]
+
+    """filter the rows returned"""
+    where: BreadEntriesBoolExp
+  ): [BreadEntries!]!
+
+  """An aggregate relationship"""
+  breadEntriesAggregate(
+    """distinct select on columns"""
+    distinctOn: [BreadEntriesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [BreadEntriesOrderBy!]
+
+    """filter the rows returned"""
+    where: BreadEntriesBoolExp
+  ): BreadEntriesAggregate!
+  createdAt: timestamptz!
+  deletedAt: timestamptz
+  email: String!
+  id: uuid!
+  name: String!
+
+  """An array relationship"""
+  recipeNotes(
+    """distinct select on columns"""
+    distinctOn: [RecipeNotesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [RecipeNotesOrderBy!]
+
+    """filter the rows returned"""
+    where: RecipeNotesBoolExp
+  ): [RecipeNotes!]!
+
+  """An aggregate relationship"""
+  recipeNotesAggregate(
+    """distinct select on columns"""
+    distinctOn: [RecipeNotesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [RecipeNotesOrderBy!]
+
+    """filter the rows returned"""
+    where: RecipeNotesBoolExp
+  ): RecipeNotesAggregate!
+
+  """An array relationship"""
+  recipes(
+    """distinct select on columns"""
+    distinctOn: [RecipesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [RecipesOrderBy!]
+
+    """filter the rows returned"""
+    where: RecipesBoolExp
+  ): [Recipes!]!
+
+  """An aggregate relationship"""
+  recipesAggregate(
+    """distinct select on columns"""
+    distinctOn: [RecipesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [RecipesOrderBy!]
+
+    """filter the rows returned"""
+    where: RecipesBoolExp
+  ): RecipesAggregate!
+  stripeCustomerId: String!
+  updatedAt: timestamptz!
+}
+
+"""
+aggregated selection of "users"
+"""
+type UsersAggregate {
+  aggregate: UsersAggregateFields
+  nodes: [Users!]!
+}
+
+"""
+aggregate fields of "users"
+"""
+type UsersAggregateFields {
+  count(columns: [UsersSelectColumn!], distinct: Boolean): Int!
+  max: UsersMaxFields
+  min: UsersMinFields
+}
+
+"""
+Boolean expression to filter rows from the table "users". All fields are combined with a logical 'AND'.
+"""
+input UsersBoolExp {
+  _and: [UsersBoolExp!]
+  _not: UsersBoolExp
+  _or: [UsersBoolExp!]
+  birthDate: DateComparisonExp
+  breadEntries: BreadEntriesBoolExp
+  breadEntriesAggregate: BreadEntriesAggregateBoolExp
+  createdAt: TimestamptzComparisonExp
+  deletedAt: TimestamptzComparisonExp
+  email: StringComparisonExp
+  id: UuidComparisonExp
+  name: StringComparisonExp
+  recipeNotes: RecipeNotesBoolExp
+  recipeNotesAggregate: RecipeNotesAggregateBoolExp
+  recipes: RecipesBoolExp
+  recipesAggregate: RecipesAggregateBoolExp
+  stripeCustomerId: StringComparisonExp
+  updatedAt: TimestamptzComparisonExp
+}
+
+"""
+unique or primary key constraints on table "users"
+"""
+enum UsersConstraint {
+  """
+  unique or primary key constraint on columns "email"
+  """
+  users_email_key
+
+  """
+  unique or primary key constraint on columns "id"
+  """
+  users_pkey
+
+  """
+  unique or primary key constraint on columns "stripe_customer_id"
+  """
+  users_stripe_customer_id_key
+}
+
+"""
+input type for inserting data into table "users"
+"""
+input UsersInsertInput {
+  birthDate: date
+  breadEntries: BreadEntriesArrRelInsertInput
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  email: String
+  id: uuid
+  name: String
+  recipeNotes: RecipeNotesArrRelInsertInput
+  recipes: RecipesArrRelInsertInput
+  stripeCustomerId: String
+  updatedAt: timestamptz
+}
+
+"""aggregate max on columns"""
+type UsersMaxFields {
+  birthDate: date
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  email: String
+  id: uuid
+  name: String
+  stripeCustomerId: String
+  updatedAt: timestamptz
+}
+
+"""aggregate min on columns"""
+type UsersMinFields {
+  birthDate: date
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  email: String
+  id: uuid
+  name: String
+  stripeCustomerId: String
+  updatedAt: timestamptz
+}
+
+"""
+response of any mutation on the table "users"
+"""
+type UsersMutationResponse {
+  """number of rows affected by the mutation"""
+  affectedRows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [Users!]!
+}
+
+"""
+input type for inserting object relation for remote table "users"
+"""
+input UsersObjRelInsertInput {
+  data: UsersInsertInput!
+
+  """upsert condition"""
+  onConflict: UsersOnConflict
+}
+
+"""
+on_conflict condition type for table "users"
+"""
+input UsersOnConflict {
+  constraint: UsersConstraint!
+  updateColumns: [UsersUpdateColumn!]! = []
+  where: UsersBoolExp
+}
+
+"""Ordering options when selecting data from "users"."""
+input UsersOrderBy {
+  birthDate: OrderBy
+  breadEntriesAggregate: BreadEntriesAggregateOrderBy
+  createdAt: OrderBy
+  deletedAt: OrderBy
+  email: OrderBy
+  id: OrderBy
+  name: OrderBy
+  recipeNotesAggregate: RecipeNotesAggregateOrderBy
+  recipesAggregate: RecipesAggregateOrderBy
+  stripeCustomerId: OrderBy
+  updatedAt: OrderBy
+}
+
+"""primary key columns input for table: users"""
+input UsersPkColumnsInput {
+  id: uuid!
+}
+
+"""
+select columns of table "users"
+"""
+enum UsersSelectColumn {
+  """column name"""
+  birthDate
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  deletedAt
+
+  """column name"""
+  email
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+
+  """column name"""
+  stripeCustomerId
+
+  """column name"""
+  updatedAt
+}
+
+"""
+input type for updating data in table "users"
+"""
+input UsersSetInput {
+  birthDate: date
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  email: String
+  id: uuid
+  name: String
+  stripeCustomerId: String
+  updatedAt: timestamptz
+}
+
+"""
+Streaming cursor of the table "users"
+"""
+input UsersStreamCursorInput {
+  """Stream column input with initial value"""
+  initialValue: UsersStreamCursorValueInput!
+
+  """cursor ordering"""
+  ordering: CursorOrdering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input UsersStreamCursorValueInput {
+  birthDate: date
+  createdAt: timestamptz
+  deletedAt: timestamptz
+  email: String
+  id: uuid
+  name: String
+  stripeCustomerId: String
+  updatedAt: timestamptz
+}
+
+"""
+update columns of table "users"
+"""
+enum UsersUpdateColumn {
+  """column name"""
+  birthDate
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  deletedAt
+
+  """column name"""
+  email
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+
+  """column name"""
+  stripeCustomerId
+
+  """column name"""
+  updatedAt
+}
+
+input UsersUpdates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: UsersSetInput
+
+  """filter the rows which have to be updated"""
+  where: UsersBoolExp!
+}
+
+"""
+Boolean expression to compare columns of type "uuid". All fields are combined with logical 'AND'.
+"""
+input UuidComparisonExp {
+  _eq: uuid
+  _gt: uuid
+  _gte: uuid
+  _in: [uuid!]
+  _isNull: Boolean
+  _lt: uuid
+  _lte: uuid
+  _neq: uuid
+  _nin: [uuid!]
+}
+
+input breadEntriesAggregateBoolExpBool_and {
+  arguments: BreadEntriesSelectColumnBreadEntriesAggregateBoolExpBool_andArgumentsColumns!
+  distinct: Boolean
+  filter: BreadEntriesBoolExp
+  predicate: BooleanComparisonExp!
+}
+
+input breadEntriesAggregateBoolExpBool_or {
+  arguments: BreadEntriesSelectColumnBreadEntriesAggregateBoolExpBool_orArgumentsColumns!
+  distinct: Boolean
+  filter: BreadEntriesBoolExp
+  predicate: BooleanComparisonExp!
+}
+
+input breadEntriesAggregateBoolExpCount {
+  arguments: [BreadEntriesSelectColumn!]
+  distinct: Boolean
+  filter: BreadEntriesBoolExp
+  predicate: IntComparisonExp!
+}
+
+input breadEntryImagesAggregateBoolExpCount {
+  arguments: [BreadEntryImagesSelectColumn!]
+  distinct: Boolean
+  filter: BreadEntryImagesBoolExp
+  predicate: IntComparisonExp!
+}
+
+input chatMessageFilesAggregateBoolExpCount {
+  arguments: [ChatMessageFilesSelectColumn!]
+  distinct: Boolean
+  filter: ChatMessageFilesBoolExp
+  predicate: IntComparisonExp!
+}
+
+input chatMessagesAggregateBoolExpCount {
+  arguments: [ChatMessagesSelectColumn!]
+  distinct: Boolean
+  filter: ChatMessagesBoolExp
+  predicate: IntComparisonExp!
+}
+
+scalar date
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "bread_entries"
+  """
+  deleteBreadEntries(
+    """filter the rows which have to be deleted"""
+    where: BreadEntriesBoolExp!
+  ): BreadEntriesMutationResponse
+
+  """
+  delete single row from the table: "bread_entries"
+  """
+  deleteBreadEntriesByPk(id: uuid!): BreadEntries
+
+  """
+  delete data from the table: "bread_entry_images"
+  """
+  deleteBreadEntryImages(
+    """filter the rows which have to be deleted"""
+    where: BreadEntryImagesBoolExp!
+  ): BreadEntryImagesMutationResponse
+
+  """
+  delete single row from the table: "bread_entry_images"
+  """
+  deleteBreadEntryImagesByPk(id: uuid!): BreadEntryImages
+
+  """
+  delete data from the table: "chat_message_files"
+  """
+  deleteChatMessageFiles(
+    """filter the rows which have to be deleted"""
+    where: ChatMessageFilesBoolExp!
+  ): ChatMessageFilesMutationResponse
+
+  """
+  delete single row from the table: "chat_message_files"
+  """
+  deleteChatMessageFilesByPk(id: uuid!): ChatMessageFiles
+
+  """
+  delete data from the table: "chat_messages"
+  """
+  deleteChatMessages(
+    """filter the rows which have to be deleted"""
+    where: ChatMessagesBoolExp!
+  ): ChatMessagesMutationResponse
+
+  """
+  delete single row from the table: "chat_messages"
+  """
+  deleteChatMessagesByPk(id: uuid!): ChatMessages
+
+  """
+  delete data from the table: "chat_threads"
+  """
+  deleteChatThreads(
+    """filter the rows which have to be deleted"""
+    where: ChatThreadsBoolExp!
+  ): ChatThreadsMutationResponse
+
+  """
+  delete single row from the table: "chat_threads"
+  """
+  deleteChatThreadsByPk(id: uuid!): ChatThreads
+
+  """
+  delete data from the table: "recipe_notes"
+  """
+  deleteRecipeNotes(
+    """filter the rows which have to be deleted"""
+    where: RecipeNotesBoolExp!
+  ): RecipeNotesMutationResponse
+
+  """
+  delete single row from the table: "recipe_notes"
+  """
+  deleteRecipeNotesByPk(id: uuid!): RecipeNotes
+
+  """
+  delete data from the table: "recipes"
+  """
+  deleteRecipes(
+    """filter the rows which have to be deleted"""
+    where: RecipesBoolExp!
+  ): RecipesMutationResponse
+
+  """
+  delete single row from the table: "recipes"
+  """
+  deleteRecipesByPk(id: uuid!): Recipes
+
+  """
+  delete data from the table: "users"
+  """
+  deleteUsers(
+    """filter the rows which have to be deleted"""
+    where: UsersBoolExp!
+  ): UsersMutationResponse
+
+  """
+  delete single row from the table: "users"
+  """
+  deleteUsersByPk(id: uuid!): Users
+
+  """
+  insert data into the table: "bread_entries"
+  """
+  insertBreadEntries(
+    """the rows to be inserted"""
+    objects: [BreadEntriesInsertInput!]!
+
+    """upsert condition"""
+    onConflict: BreadEntriesOnConflict
+  ): BreadEntriesMutationResponse
+
+  """
+  insert a single row into the table: "bread_entries"
+  """
+  insertBreadEntriesOne(
+    """the row to be inserted"""
+    object: BreadEntriesInsertInput!
+
+    """upsert condition"""
+    onConflict: BreadEntriesOnConflict
+  ): BreadEntries
+
+  """
+  insert data into the table: "bread_entry_images"
+  """
+  insertBreadEntryImages(
+    """the rows to be inserted"""
+    objects: [BreadEntryImagesInsertInput!]!
+
+    """upsert condition"""
+    onConflict: BreadEntryImagesOnConflict
+  ): BreadEntryImagesMutationResponse
+
+  """
+  insert a single row into the table: "bread_entry_images"
+  """
+  insertBreadEntryImagesOne(
+    """the row to be inserted"""
+    object: BreadEntryImagesInsertInput!
+
+    """upsert condition"""
+    onConflict: BreadEntryImagesOnConflict
+  ): BreadEntryImages
+
+  """
+  insert data into the table: "chat_message_files"
+  """
+  insertChatMessageFiles(
+    """the rows to be inserted"""
+    objects: [ChatMessageFilesInsertInput!]!
+
+    """upsert condition"""
+    onConflict: ChatMessageFilesOnConflict
+  ): ChatMessageFilesMutationResponse
+
+  """
+  insert a single row into the table: "chat_message_files"
+  """
+  insertChatMessageFilesOne(
+    """the row to be inserted"""
+    object: ChatMessageFilesInsertInput!
+
+    """upsert condition"""
+    onConflict: ChatMessageFilesOnConflict
+  ): ChatMessageFiles
+
+  """
+  insert data into the table: "chat_messages"
+  """
+  insertChatMessages(
+    """the rows to be inserted"""
+    objects: [ChatMessagesInsertInput!]!
+
+    """upsert condition"""
+    onConflict: ChatMessagesOnConflict
+  ): ChatMessagesMutationResponse
+
+  """
+  insert a single row into the table: "chat_messages"
+  """
+  insertChatMessagesOne(
+    """the row to be inserted"""
+    object: ChatMessagesInsertInput!
+
+    """upsert condition"""
+    onConflict: ChatMessagesOnConflict
+  ): ChatMessages
+
+  """
+  insert data into the table: "chat_threads"
+  """
+  insertChatThreads(
+    """the rows to be inserted"""
+    objects: [ChatThreadsInsertInput!]!
+
+    """upsert condition"""
+    onConflict: ChatThreadsOnConflict
+  ): ChatThreadsMutationResponse
+
+  """
+  insert a single row into the table: "chat_threads"
+  """
+  insertChatThreadsOne(
+    """the row to be inserted"""
+    object: ChatThreadsInsertInput!
+
+    """upsert condition"""
+    onConflict: ChatThreadsOnConflict
+  ): ChatThreads
+
+  """
+  insert data into the table: "recipe_notes"
+  """
+  insertRecipeNotes(
+    """the rows to be inserted"""
+    objects: [RecipeNotesInsertInput!]!
+
+    """upsert condition"""
+    onConflict: RecipeNotesOnConflict
+  ): RecipeNotesMutationResponse
+
+  """
+  insert a single row into the table: "recipe_notes"
+  """
+  insertRecipeNotesOne(
+    """the row to be inserted"""
+    object: RecipeNotesInsertInput!
+
+    """upsert condition"""
+    onConflict: RecipeNotesOnConflict
+  ): RecipeNotes
+
+  """
+  insert data into the table: "recipes"
+  """
+  insertRecipes(
+    """the rows to be inserted"""
+    objects: [RecipesInsertInput!]!
+
+    """upsert condition"""
+    onConflict: RecipesOnConflict
+  ): RecipesMutationResponse
+
+  """
+  insert a single row into the table: "recipes"
+  """
+  insertRecipesOne(
+    """the row to be inserted"""
+    object: RecipesInsertInput!
+
+    """upsert condition"""
+    onConflict: RecipesOnConflict
+  ): Recipes
+
+  """
+  insert data into the table: "users"
+  """
+  insertUsers(
+    """the rows to be inserted"""
+    objects: [UsersInsertInput!]!
+
+    """upsert condition"""
+    onConflict: UsersOnConflict
+  ): UsersMutationResponse
+
+  """
+  insert a single row into the table: "users"
+  """
+  insertUsersOne(
+    """the row to be inserted"""
+    object: UsersInsertInput!
+
+    """upsert condition"""
+    onConflict: UsersOnConflict
+  ): Users
+
+  """
+  update data of the table: "bread_entries"
+  """
+  updateBreadEntries(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: BreadEntriesIncInput
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: BreadEntriesSetInput
+
+    """filter the rows which have to be updated"""
+    where: BreadEntriesBoolExp!
+  ): BreadEntriesMutationResponse
+
+  """
+  update single row of the table: "bread_entries"
+  """
+  updateBreadEntriesByPk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: BreadEntriesIncInput
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: BreadEntriesSetInput
+    pkColumns: BreadEntriesPkColumnsInput!
+  ): BreadEntries
+
+  """
+  update multiples rows of table: "bread_entries"
+  """
+  updateBreadEntriesMany(
+    """updates to execute, in order"""
+    updates: [BreadEntriesUpdates!]!
+  ): [BreadEntriesMutationResponse]
+
+  """
+  update data of the table: "bread_entry_images"
+  """
+  updateBreadEntryImages(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: BreadEntryImagesIncInput
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: BreadEntryImagesSetInput
+
+    """filter the rows which have to be updated"""
+    where: BreadEntryImagesBoolExp!
+  ): BreadEntryImagesMutationResponse
+
+  """
+  update single row of the table: "bread_entry_images"
+  """
+  updateBreadEntryImagesByPk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: BreadEntryImagesIncInput
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: BreadEntryImagesSetInput
+    pkColumns: BreadEntryImagesPkColumnsInput!
+  ): BreadEntryImages
+
+  """
+  update multiples rows of table: "bread_entry_images"
+  """
+  updateBreadEntryImagesMany(
+    """updates to execute, in order"""
+    updates: [BreadEntryImagesUpdates!]!
+  ): [BreadEntryImagesMutationResponse]
+
+  """
+  update data of the table: "chat_message_files"
+  """
+  updateChatMessageFiles(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: ChatMessageFilesIncInput
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: ChatMessageFilesSetInput
+
+    """filter the rows which have to be updated"""
+    where: ChatMessageFilesBoolExp!
+  ): ChatMessageFilesMutationResponse
+
+  """
+  update single row of the table: "chat_message_files"
+  """
+  updateChatMessageFilesByPk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: ChatMessageFilesIncInput
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: ChatMessageFilesSetInput
+    pkColumns: ChatMessageFilesPkColumnsInput!
+  ): ChatMessageFiles
+
+  """
+  update multiples rows of table: "chat_message_files"
+  """
+  updateChatMessageFilesMany(
+    """updates to execute, in order"""
+    updates: [ChatMessageFilesUpdates!]!
+  ): [ChatMessageFilesMutationResponse]
+
+  """
+  update data of the table: "chat_messages"
+  """
+  updateChatMessages(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: ChatMessagesIncInput
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: ChatMessagesSetInput
+
+    """filter the rows which have to be updated"""
+    where: ChatMessagesBoolExp!
+  ): ChatMessagesMutationResponse
+
+  """
+  update single row of the table: "chat_messages"
+  """
+  updateChatMessagesByPk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: ChatMessagesIncInput
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: ChatMessagesSetInput
+    pkColumns: ChatMessagesPkColumnsInput!
+  ): ChatMessages
+
+  """
+  update multiples rows of table: "chat_messages"
+  """
+  updateChatMessagesMany(
+    """updates to execute, in order"""
+    updates: [ChatMessagesUpdates!]!
+  ): [ChatMessagesMutationResponse]
+
+  """
+  update data of the table: "chat_threads"
+  """
+  updateChatThreads(
+    """sets the columns of the filtered rows to the given values"""
+    _set: ChatThreadsSetInput
+
+    """filter the rows which have to be updated"""
+    where: ChatThreadsBoolExp!
+  ): ChatThreadsMutationResponse
+
+  """
+  update single row of the table: "chat_threads"
+  """
+  updateChatThreadsByPk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: ChatThreadsSetInput
+    pkColumns: ChatThreadsPkColumnsInput!
+  ): ChatThreads
+
+  """
+  update multiples rows of table: "chat_threads"
+  """
+  updateChatThreadsMany(
+    """updates to execute, in order"""
+    updates: [ChatThreadsUpdates!]!
+  ): [ChatThreadsMutationResponse]
+
+  """
+  update data of the table: "recipe_notes"
+  """
+  updateRecipeNotes(
+    """sets the columns of the filtered rows to the given values"""
+    _set: RecipeNotesSetInput
+
+    """filter the rows which have to be updated"""
+    where: RecipeNotesBoolExp!
+  ): RecipeNotesMutationResponse
+
+  """
+  update single row of the table: "recipe_notes"
+  """
+  updateRecipeNotesByPk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: RecipeNotesSetInput
+    pkColumns: RecipeNotesPkColumnsInput!
+  ): RecipeNotes
+
+  """
+  update multiples rows of table: "recipe_notes"
+  """
+  updateRecipeNotesMany(
+    """updates to execute, in order"""
+    updates: [RecipeNotesUpdates!]!
+  ): [RecipeNotesMutationResponse]
+
+  """
+  update data of the table: "recipes"
+  """
+  updateRecipes(
+    """sets the columns of the filtered rows to the given values"""
+    _set: RecipesSetInput
+
+    """filter the rows which have to be updated"""
+    where: RecipesBoolExp!
+  ): RecipesMutationResponse
+
+  """
+  update single row of the table: "recipes"
+  """
+  updateRecipesByPk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: RecipesSetInput
+    pkColumns: RecipesPkColumnsInput!
+  ): Recipes
+
+  """
+  update multiples rows of table: "recipes"
+  """
+  updateRecipesMany(
+    """updates to execute, in order"""
+    updates: [RecipesUpdates!]!
+  ): [RecipesMutationResponse]
+
+  """
+  update data of the table: "users"
+  """
+  updateUsers(
+    """sets the columns of the filtered rows to the given values"""
+    _set: UsersSetInput
+
+    """filter the rows which have to be updated"""
+    where: UsersBoolExp!
+  ): UsersMutationResponse
+
+  """
+  update single row of the table: "users"
+  """
+  updateUsersByPk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: UsersSetInput
+    pkColumns: UsersPkColumnsInput!
+  ): Users
+
+  """
+  update multiples rows of table: "users"
+  """
+  updateUsersMany(
+    """updates to execute, in order"""
+    updates: [UsersUpdates!]!
+  ): [UsersMutationResponse]
+}
+
+scalar numeric
+
+type query_root {
+  """An array relationship"""
+  breadEntries(
+    """distinct select on columns"""
+    distinctOn: [BreadEntriesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [BreadEntriesOrderBy!]
+
+    """filter the rows returned"""
+    where: BreadEntriesBoolExp
+  ): [BreadEntries!]!
+
+  """An aggregate relationship"""
+  breadEntriesAggregate(
+    """distinct select on columns"""
+    distinctOn: [BreadEntriesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [BreadEntriesOrderBy!]
+
+    """filter the rows returned"""
+    where: BreadEntriesBoolExp
+  ): BreadEntriesAggregate!
+
+  """fetch data from the table: "bread_entries" using primary key columns"""
+  breadEntriesByPk(id: uuid!): BreadEntries
+
+  """
+  fetch data from the table: "bread_entry_images"
+  """
+  breadEntryImages(
+    """distinct select on columns"""
+    distinctOn: [BreadEntryImagesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [BreadEntryImagesOrderBy!]
+
+    """filter the rows returned"""
+    where: BreadEntryImagesBoolExp
+  ): [BreadEntryImages!]!
+
+  """
+  fetch aggregated fields from the table: "bread_entry_images"
+  """
+  breadEntryImagesAggregate(
+    """distinct select on columns"""
+    distinctOn: [BreadEntryImagesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [BreadEntryImagesOrderBy!]
+
+    """filter the rows returned"""
+    where: BreadEntryImagesBoolExp
+  ): BreadEntryImagesAggregate!
+
+  """
+  fetch data from the table: "bread_entry_images" using primary key columns
+  """
+  breadEntryImagesByPk(id: uuid!): BreadEntryImages
+
+  """
+  fetch data from the table: "chat_message_files"
+  """
+  chatMessageFiles(
+    """distinct select on columns"""
+    distinctOn: [ChatMessageFilesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [ChatMessageFilesOrderBy!]
+
+    """filter the rows returned"""
+    where: ChatMessageFilesBoolExp
+  ): [ChatMessageFiles!]!
+
+  """
+  fetch aggregated fields from the table: "chat_message_files"
+  """
+  chatMessageFilesAggregate(
+    """distinct select on columns"""
+    distinctOn: [ChatMessageFilesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [ChatMessageFilesOrderBy!]
+
+    """filter the rows returned"""
+    where: ChatMessageFilesBoolExp
+  ): ChatMessageFilesAggregate!
+
+  """
+  fetch data from the table: "chat_message_files" using primary key columns
+  """
+  chatMessageFilesByPk(id: uuid!): ChatMessageFiles
+
+  """
+  fetch data from the table: "chat_messages"
+  """
+  chatMessages(
+    """distinct select on columns"""
+    distinctOn: [ChatMessagesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [ChatMessagesOrderBy!]
+
+    """filter the rows returned"""
+    where: ChatMessagesBoolExp
+  ): [ChatMessages!]!
+
+  """
+  fetch aggregated fields from the table: "chat_messages"
+  """
+  chatMessagesAggregate(
+    """distinct select on columns"""
+    distinctOn: [ChatMessagesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [ChatMessagesOrderBy!]
+
+    """filter the rows returned"""
+    where: ChatMessagesBoolExp
+  ): ChatMessagesAggregate!
+
+  """fetch data from the table: "chat_messages" using primary key columns"""
+  chatMessagesByPk(id: uuid!): ChatMessages
+
+  """
+  fetch data from the table: "chat_threads"
+  """
+  chatThreads(
+    """distinct select on columns"""
+    distinctOn: [ChatThreadsSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [ChatThreadsOrderBy!]
+
+    """filter the rows returned"""
+    where: ChatThreadsBoolExp
+  ): [ChatThreads!]!
+
+  """
+  fetch aggregated fields from the table: "chat_threads"
+  """
+  chatThreadsAggregate(
+    """distinct select on columns"""
+    distinctOn: [ChatThreadsSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [ChatThreadsOrderBy!]
+
+    """filter the rows returned"""
+    where: ChatThreadsBoolExp
+  ): ChatThreadsAggregate!
+
+  """fetch data from the table: "chat_threads" using primary key columns"""
+  chatThreadsByPk(id: uuid!): ChatThreads
+
+  """An array relationship"""
+  recipeNotes(
+    """distinct select on columns"""
+    distinctOn: [RecipeNotesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [RecipeNotesOrderBy!]
+
+    """filter the rows returned"""
+    where: RecipeNotesBoolExp
+  ): [RecipeNotes!]!
+
+  """An aggregate relationship"""
+  recipeNotesAggregate(
+    """distinct select on columns"""
+    distinctOn: [RecipeNotesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [RecipeNotesOrderBy!]
+
+    """filter the rows returned"""
+    where: RecipeNotesBoolExp
+  ): RecipeNotesAggregate!
+
+  """fetch data from the table: "recipe_notes" using primary key columns"""
+  recipeNotesByPk(id: uuid!): RecipeNotes
+
+  """An array relationship"""
+  recipes(
+    """distinct select on columns"""
+    distinctOn: [RecipesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [RecipesOrderBy!]
+
+    """filter the rows returned"""
+    where: RecipesBoolExp
+  ): [Recipes!]!
+
+  """An aggregate relationship"""
+  recipesAggregate(
+    """distinct select on columns"""
+    distinctOn: [RecipesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [RecipesOrderBy!]
+
+    """filter the rows returned"""
+    where: RecipesBoolExp
+  ): RecipesAggregate!
+
+  """fetch data from the table: "recipes" using primary key columns"""
+  recipesByPk(id: uuid!): Recipes
+
+  """
+  fetch data from the table: "users"
+  """
+  users(
+    """distinct select on columns"""
+    distinctOn: [UsersSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [UsersOrderBy!]
+
+    """filter the rows returned"""
+    where: UsersBoolExp
+  ): [Users!]!
+
+  """
+  fetch aggregated fields from the table: "users"
+  """
+  usersAggregate(
+    """distinct select on columns"""
+    distinctOn: [UsersSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [UsersOrderBy!]
+
+    """filter the rows returned"""
+    where: UsersBoolExp
+  ): UsersAggregate!
+
+  """fetch data from the table: "users" using primary key columns"""
+  usersByPk(id: uuid!): Users
+}
+
+input recipeNotesAggregateBoolExpCount {
+  arguments: [RecipeNotesSelectColumn!]
+  distinct: Boolean
+  filter: RecipeNotesBoolExp
+  predicate: IntComparisonExp!
+}
+
+input recipesAggregateBoolExpCount {
+  arguments: [RecipesSelectColumn!]
+  distinct: Boolean
+  filter: RecipesBoolExp
+  predicate: IntComparisonExp!
+}
+
+type subscription_root {
+  """An array relationship"""
+  breadEntries(
+    """distinct select on columns"""
+    distinctOn: [BreadEntriesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [BreadEntriesOrderBy!]
+
+    """filter the rows returned"""
+    where: BreadEntriesBoolExp
+  ): [BreadEntries!]!
+
+  """An aggregate relationship"""
+  breadEntriesAggregate(
+    """distinct select on columns"""
+    distinctOn: [BreadEntriesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [BreadEntriesOrderBy!]
+
+    """filter the rows returned"""
+    where: BreadEntriesBoolExp
+  ): BreadEntriesAggregate!
+
+  """fetch data from the table: "bread_entries" using primary key columns"""
+  breadEntriesByPk(id: uuid!): BreadEntries
+
+  """
+  fetch data from the table in a streaming manner: "bread_entries"
+  """
+  breadEntriesStream(
+    """maximum number of rows returned in a single batch"""
+    batchSize: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [BreadEntriesStreamCursorInput]!
+
+    """filter the rows returned"""
+    where: BreadEntriesBoolExp
+  ): [BreadEntries!]!
+
+  """
+  fetch data from the table: "bread_entry_images"
+  """
+  breadEntryImages(
+    """distinct select on columns"""
+    distinctOn: [BreadEntryImagesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [BreadEntryImagesOrderBy!]
+
+    """filter the rows returned"""
+    where: BreadEntryImagesBoolExp
+  ): [BreadEntryImages!]!
+
+  """
+  fetch aggregated fields from the table: "bread_entry_images"
+  """
+  breadEntryImagesAggregate(
+    """distinct select on columns"""
+    distinctOn: [BreadEntryImagesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [BreadEntryImagesOrderBy!]
+
+    """filter the rows returned"""
+    where: BreadEntryImagesBoolExp
+  ): BreadEntryImagesAggregate!
+
+  """
+  fetch data from the table: "bread_entry_images" using primary key columns
+  """
+  breadEntryImagesByPk(id: uuid!): BreadEntryImages
+
+  """
+  fetch data from the table in a streaming manner: "bread_entry_images"
+  """
+  breadEntryImagesStream(
+    """maximum number of rows returned in a single batch"""
+    batchSize: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [BreadEntryImagesStreamCursorInput]!
+
+    """filter the rows returned"""
+    where: BreadEntryImagesBoolExp
+  ): [BreadEntryImages!]!
+
+  """
+  fetch data from the table: "chat_message_files"
+  """
+  chatMessageFiles(
+    """distinct select on columns"""
+    distinctOn: [ChatMessageFilesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [ChatMessageFilesOrderBy!]
+
+    """filter the rows returned"""
+    where: ChatMessageFilesBoolExp
+  ): [ChatMessageFiles!]!
+
+  """
+  fetch aggregated fields from the table: "chat_message_files"
+  """
+  chatMessageFilesAggregate(
+    """distinct select on columns"""
+    distinctOn: [ChatMessageFilesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [ChatMessageFilesOrderBy!]
+
+    """filter the rows returned"""
+    where: ChatMessageFilesBoolExp
+  ): ChatMessageFilesAggregate!
+
+  """
+  fetch data from the table: "chat_message_files" using primary key columns
+  """
+  chatMessageFilesByPk(id: uuid!): ChatMessageFiles
+
+  """
+  fetch data from the table in a streaming manner: "chat_message_files"
+  """
+  chatMessageFilesStream(
+    """maximum number of rows returned in a single batch"""
+    batchSize: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [ChatMessageFilesStreamCursorInput]!
+
+    """filter the rows returned"""
+    where: ChatMessageFilesBoolExp
+  ): [ChatMessageFiles!]!
+
+  """
+  fetch data from the table: "chat_messages"
+  """
+  chatMessages(
+    """distinct select on columns"""
+    distinctOn: [ChatMessagesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [ChatMessagesOrderBy!]
+
+    """filter the rows returned"""
+    where: ChatMessagesBoolExp
+  ): [ChatMessages!]!
+
+  """
+  fetch aggregated fields from the table: "chat_messages"
+  """
+  chatMessagesAggregate(
+    """distinct select on columns"""
+    distinctOn: [ChatMessagesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [ChatMessagesOrderBy!]
+
+    """filter the rows returned"""
+    where: ChatMessagesBoolExp
+  ): ChatMessagesAggregate!
+
+  """fetch data from the table: "chat_messages" using primary key columns"""
+  chatMessagesByPk(id: uuid!): ChatMessages
+
+  """
+  fetch data from the table in a streaming manner: "chat_messages"
+  """
+  chatMessagesStream(
+    """maximum number of rows returned in a single batch"""
+    batchSize: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [ChatMessagesStreamCursorInput]!
+
+    """filter the rows returned"""
+    where: ChatMessagesBoolExp
+  ): [ChatMessages!]!
+
+  """
+  fetch data from the table: "chat_threads"
+  """
+  chatThreads(
+    """distinct select on columns"""
+    distinctOn: [ChatThreadsSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [ChatThreadsOrderBy!]
+
+    """filter the rows returned"""
+    where: ChatThreadsBoolExp
+  ): [ChatThreads!]!
+
+  """
+  fetch aggregated fields from the table: "chat_threads"
+  """
+  chatThreadsAggregate(
+    """distinct select on columns"""
+    distinctOn: [ChatThreadsSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [ChatThreadsOrderBy!]
+
+    """filter the rows returned"""
+    where: ChatThreadsBoolExp
+  ): ChatThreadsAggregate!
+
+  """fetch data from the table: "chat_threads" using primary key columns"""
+  chatThreadsByPk(id: uuid!): ChatThreads
+
+  """
+  fetch data from the table in a streaming manner: "chat_threads"
+  """
+  chatThreadsStream(
+    """maximum number of rows returned in a single batch"""
+    batchSize: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [ChatThreadsStreamCursorInput]!
+
+    """filter the rows returned"""
+    where: ChatThreadsBoolExp
+  ): [ChatThreads!]!
+
+  """An array relationship"""
+  recipeNotes(
+    """distinct select on columns"""
+    distinctOn: [RecipeNotesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [RecipeNotesOrderBy!]
+
+    """filter the rows returned"""
+    where: RecipeNotesBoolExp
+  ): [RecipeNotes!]!
+
+  """An aggregate relationship"""
+  recipeNotesAggregate(
+    """distinct select on columns"""
+    distinctOn: [RecipeNotesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [RecipeNotesOrderBy!]
+
+    """filter the rows returned"""
+    where: RecipeNotesBoolExp
+  ): RecipeNotesAggregate!
+
+  """fetch data from the table: "recipe_notes" using primary key columns"""
+  recipeNotesByPk(id: uuid!): RecipeNotes
+
+  """
+  fetch data from the table in a streaming manner: "recipe_notes"
+  """
+  recipeNotesStream(
+    """maximum number of rows returned in a single batch"""
+    batchSize: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [RecipeNotesStreamCursorInput]!
+
+    """filter the rows returned"""
+    where: RecipeNotesBoolExp
+  ): [RecipeNotes!]!
+
+  """An array relationship"""
+  recipes(
+    """distinct select on columns"""
+    distinctOn: [RecipesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [RecipesOrderBy!]
+
+    """filter the rows returned"""
+    where: RecipesBoolExp
+  ): [Recipes!]!
+
+  """An aggregate relationship"""
+  recipesAggregate(
+    """distinct select on columns"""
+    distinctOn: [RecipesSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [RecipesOrderBy!]
+
+    """filter the rows returned"""
+    where: RecipesBoolExp
+  ): RecipesAggregate!
+
+  """fetch data from the table: "recipes" using primary key columns"""
+  recipesByPk(id: uuid!): Recipes
+
+  """
+  fetch data from the table in a streaming manner: "recipes"
+  """
+  recipesStream(
+    """maximum number of rows returned in a single batch"""
+    batchSize: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [RecipesStreamCursorInput]!
+
+    """filter the rows returned"""
+    where: RecipesBoolExp
+  ): [Recipes!]!
+
+  """
+  fetch data from the table: "users"
+  """
+  users(
+    """distinct select on columns"""
+    distinctOn: [UsersSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [UsersOrderBy!]
+
+    """filter the rows returned"""
+    where: UsersBoolExp
+  ): [Users!]!
+
+  """
+  fetch aggregated fields from the table: "users"
+  """
+  usersAggregate(
+    """distinct select on columns"""
+    distinctOn: [UsersSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [UsersOrderBy!]
+
+    """filter the rows returned"""
+    where: UsersBoolExp
+  ): UsersAggregate!
+
+  """fetch data from the table: "users" using primary key columns"""
+  usersByPk(id: uuid!): Users
+
+  """
+  fetch data from the table in a streaming manner: "users"
+  """
+  usersStream(
+    """maximum number of rows returned in a single batch"""
+    batchSize: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [UsersStreamCursorInput]!
+
+    """filter the rows returned"""
+    where: UsersBoolExp
+  ): [Users!]!
+}
+
+scalar timestamptz
+
+scalar uuid

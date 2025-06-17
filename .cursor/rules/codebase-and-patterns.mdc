@@ -1,0 +1,79 @@
+---
+description: A complete overview of the application and codebase
+globs: *
+alwaysApply: false
+---
+This is a web application and mobile application via Capacitor. It is an AI chat application for parents to get advice on how to raise their children.
+
+## Stack:
+
+- Next.js (primarily the /pages router)
+- Business logic in API routes
+- GraphQL via Hasura + Postgres. This is used on the client and server.
+- Tailwind
+- Shadcn UI
+- TypeScript
+- React
+- Supabase for authentication
+- Stripe
+
+## Folder Structure
+
+- `src/components` - Reusable components
+- `src/components/ui` - Shadcn UI components (our base design system)
+- `src/constants` - Where we store constant values of the app. Particularly, use `src/constants/pages` for defining URLs and paths
+- `src/context` - Store React context (global state)
+- `src/gql` - GraphQL queries that are used in multiple places in the app in the client
+- `src/hooks` - Reusable custom hooks
+- `src/layouts` - Abstraction for page layouts/templates
+- `src/pages` - This is a Next.js standard that defines routes based on the folder structure
+- `src/app` - This is a Next.js standard that defines routes based on the folder structure
+- `src/screens` - Imported into `src/app` and `src/pages`. These wrap the actual content of the page
+- `src/services` - Communicate with something external
+  - Segment into `/client` and `/server`. Client is meant to run in the browser and can use browser APIs. Server is meant to run in a server context and can directly touch the database or external services. Only use private keys in a server service that runs on the server and NEVER use private keys in the browser
+- `src/styles` - Abstractions for styles
+- `src/types` - TypeScript files
+- `src/lib` - Reusable functionality for within the application (should this be broken apart further? It can get dense.)
+- - `supabase` - Supabase functions (primarily used for signup), it will call webhooks in the app
+
+Building a page/route and general patterns used:
+
+- All code starts in the `src` folder
+- Create a file in `pages` for a new route/page
+- Create a `screens` which holds the page content and is the entry point for the page route
+- Build reusable components in `components`
+- Add theme variables to `tailwind.config.ts` when needed
+- Favor React hooks and functional components. There likely shouldn't be any class components.
+- Always use TypeScript. If the page uses data, make sure you use the automatically generated types from `src/types/generated`
+- Generate types using `yarn codegen:client` and `yarn codegen:server`
+- Favor statically generated pages when it makes sense for speed
+- Files live where they're used. For example, tests live next to files that they're testing, and GraphQL queries live next to the page where the query is called (unless called in multiple places)
+- ALWAYS use absolute imports, e.g., `@/components/Button`, not `../../components/Button`
+- Make sure to set up prettier to run automatically on save in VS Code, or at minimum, run it manually when pushing code
+- Only use TypeScript and make sure all type checks pass before asking for a review
+- Create request and response TypeScript payload interfaces in `@/constants/payloads` so that we are type-safe between the client and server
+- Use Tailwind for nearly all styles. On rare occasions for complex styles, or complex state that drives styles, you can use styled-components
+- Use `@headless/react` for standard UI components that aren't HTML default (dialogues/modals, accordions, tooltips, transitions, side panels, etc.)
+
+## Components
+
+- If there is a component isolated to a screen, you can create a file for it inside that screen's folder and import it `./MyComponent`.
+- For general components that are reusable across the app, put them in `src/components`. The folder name should be the component's name, and each folder will contain an index file and a component file. You may also need a `types.ts` file as well.
+- Declare components like `export default function MyComponent(props: Props) {...`
+- This is a new pattern, so not all components may have been transformed yet
+- All props should be typed with an interface `Props`
+- When you need default values, they should just be function arguments: `export default function MyComponent({ isVisible = true }: Props) {...`
+
+## APIs
+
+- Use `src/app/api` as an API gateway. All requests should flow through here.
+- Prefer Vercel edge routes when possible as they're much faster. Note the restrictions, specifically they can't use Node-specific packages (a big one being Stripe)
+- Next.js API routes
+- For authentication in Next.js, use the middleware that wraps the route handler - `src/lib/server/middleware`
+- Next/Vercel introduced Edge routes. These use a V8 engine instead of Node. They claim that it doesn't suffer from the same cold start issue and serverless functions, so it should perform faster. We should test this claim, but it seems to make sense to use these when possible. [Vercel Edge Functions](mdc:https:/vercel.com/docs/concepts/functions/edge-functions)
+
+## Styling
+
+- Use Tailwind as much as possible
+- Put things in the Tailwind theme, so if something needs to be changed (for example, a color), it only has to be done in one place.
+- We still have styled-components as a dependency, but it’s used very infrequently. I keep style-components around for styles that are driven off of complex state that is better off abstracted, but I find myself mostly reaching for the classNames from (`src/styles/utils/classNames`) helper util combined with Tailwind instead of styled-components.

@@ -1,0 +1,101 @@
+table:
+  name: family_members
+  schema: public
+object_relationships:
+  - name: family
+    using:
+      foreign_key_constraint_on: family_id
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
+array_relationships:
+  - name: timelineEvents
+    using:
+      foreign_key_constraint_on:
+        column: family_member_id
+        table:
+          name: family_timeline
+          schema: public
+insert_permissions:
+  - role: user
+    permission:
+      check:
+        family:
+          created_by_user_id:
+            _eq: X-Hasura-User-Id
+      columns:
+        - birth_date
+        - display_name
+        - family_id
+        - full_name
+        - gender
+        - gender_description
+        - location_description
+        - notes
+        - relationship_description
+        - relationship_to_children
+        - role
+    comment: ""
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - archived_at
+        - birth_date
+        - created_at
+        - deleted_at
+        - display_name
+        - family_id
+        - full_name
+        - gender
+        - gender_description
+        - id
+        - location_description
+        - notes
+        - notes_ai
+        - relationship_description
+        - relationship_description_ai
+        - relationship_to_children
+        - role
+        - updated_at
+        - user_id
+      filter:
+        _and:
+          - deleted_at:
+              _is_null: true
+          - _or:
+              - user_id:
+                  _eq: X-Hasura-User-Id
+              - family:
+                  created_by_user_id:
+                    _eq: X-Hasura-User-Id
+      limit: 50
+    comment: ""
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - archived_at
+        - birth_date
+        - deleted_at
+        - display_name
+        - full_name
+        - gender
+        - gender_description
+        - location_description
+        - notes
+        - relationship_description
+        - relationship_to_children
+        - role
+      filter:
+        _and:
+          - deleted_at:
+              _is_null: true
+          - _or:
+              - user_id:
+                  _eq: X-Hasura-User-Id
+              - family:
+                  created_by_user_id:
+                    _eq: X-Hasura-User-Id
+      check: null
+    comment: ""

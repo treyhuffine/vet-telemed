@@ -1,0 +1,58 @@
+table:
+  name: chat_messages
+  schema: public
+object_relationships:
+  - name: thread
+    using:
+      foreign_key_constraint_on: chat_thread_id
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
+array_relationships:
+  - name: files
+    using:
+      foreign_key_constraint_on:
+        column: chat_message_id
+        table:
+          name: chat_message_files
+          schema: public
+insert_permissions:
+  - role: user
+    permission:
+      check:
+        _and:
+          - thread:
+              user_id:
+                _eq: X-Hasura-User-Id
+          - user_id:
+              _eq: X-Hasura-User-Id
+      columns:
+        - chat_thread_id
+        - content
+        - id
+        - role
+        - user_id
+    comment: ""
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - archived_at
+        - chat_thread_id
+        - content
+        - created_at
+        - deleted_at
+        - id
+        - model
+        - role
+        - updated_at
+        - user_id
+      filter:
+        _and:
+          - thread:
+              user_id:
+                _eq: X-Hasura-User-Id
+          - deleted_at:
+              _is_null: true
+      limit: 100
+    comment: ""

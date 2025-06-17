@@ -1,0 +1,11 @@
+---
+description: How we handle graphql queries and mutations on the client and server
+globs: src/**/*.ts, src/**/*.tsx
+---
+We use Hasura with the standard graphql syntax (pascalCase, NOT snake_case)
+
+You can find server queries in src/services/server/graphql folder
+
+The client queries are either in src/gql folder or living alongside a component in a graphql.ts file
+
+You can see our schema definition in [schema.graphql](mdc:src/types/generated/schema.graphql)

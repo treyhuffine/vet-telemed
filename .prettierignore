@@ -1,0 +1,10 @@
+*.mdx
+*.ejs
+.next/**/*
+node_modules/**/*
+types/generated/**/*
+.cursorrules
+.gitignore
+.prettierrc
+.prettierignore
+/src/types/generated/**/*

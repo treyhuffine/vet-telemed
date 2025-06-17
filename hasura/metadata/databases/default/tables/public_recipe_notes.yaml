@@ -1,0 +1,60 @@
+table:
+  name: recipe_notes
+  schema: public
+object_relationships:
+  - name: recipe
+    using:
+      foreign_key_constraint_on: recipe_id
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
+insert_permissions:
+  - role: user
+    permission:
+      check:
+        _and:
+          - user_id:
+              _eq: X-Hasura-User-Id
+          - recipe:
+              user_id:
+                _eq: X-Hasura-User-Id
+      columns:
+        - content
+        - recipe_id
+        - user_id
+    comment: ""
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - content
+        - archived_at
+        - created_at
+        - deleted_at
+        - updated_at
+        - id
+        - recipe_id
+        - user_id
+      filter:
+        _and:
+          - user_id:
+              _eq: X-Hasura-User-Id
+          - deleted_at:
+              _is_null: true
+      limit: 100
+    comment: ""
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - archived_at
+        - content
+        - deleted_at
+      filter:
+        _and:
+          - user_id:
+              _eq: X-Hasura-User-Id
+          - deleted_at:
+              _is_null: true
+      check: null
+    comment: ""

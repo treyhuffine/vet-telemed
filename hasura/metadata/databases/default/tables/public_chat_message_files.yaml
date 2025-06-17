@@ -1,0 +1,48 @@
+table:
+  name: chat_message_files
+  schema: public
+object_relationships:
+  - name: message
+    using:
+      foreign_key_constraint_on: chat_message_id
+insert_permissions:
+  - role: user
+    permission:
+      check:
+        message:
+          user_id:
+            _eq: X-Hasura-User-Id
+      columns:
+        - chat_message_id
+        - file_name
+        - file_path
+        - file_storage_provider
+        - mime_type
+        - original_file_name
+        - size
+    comment: ""
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - size
+        - file_name
+        - file_path
+        - file_storage_provider
+        - mime_type
+        - original_file_name
+        - archived_at
+        - created_at
+        - deleted_at
+        - updated_at
+        - chat_message_id
+        - id
+      filter:
+        _and:
+          - message:
+              user_id:
+                _eq: X-Hasura-User-Id
+          - deleted_at:
+              _is_null: true
+      limit: 100
+    comment: ""

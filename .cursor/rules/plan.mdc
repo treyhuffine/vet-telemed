@@ -1,0 +1,199 @@
+---
+description: Plan for initializing the application
+globs: *
+alwaysApply: false
+---
+Below is a concise product requirements document for the “Sourdough AI Crumb Reader” web/mobile application. It includes the main user flows, technical details, and implementation notes for adapting from a previous LLM-based project (the parenting app) to this new use case. Some of the transition from the old parenting app to the new sourdo app has already been started.
+
+1. Overview
+
+Application Name: Sourdo
+Primary Goal: Allow users to upload or capture photos of sourdough crumb readings and receive an AI-generated crumb analysis (score and advice), track their baking history, and store bake details.
+
+1. Tech Stack
+	1.	Front-End:
+	•	Next.js (React) - CRITICAL: For pages and app screens, use the Next.js pages router. Only use the app router for APi routes.
+	•	TypeScript
+	•	Tailwind CSS
+	•	shadcn UI components
+	2.	Back-End:
+	•	Hasura + GraphQL (connected to Postgres)
+	3.	API:
+	•	For business logic or external service access, use Next.js API routes (see /src/app/api for examples)
+	4.	Authentication:
+	•	supabase (already exists)
+	5.	Hosting:
+	•	Deployed on Vercel.
+
+2. Core Features
+	1.	Home (Root) Page
+	•	Minimal, Google-like UI with a central call-to-action:
+	•	Button to “Take Photo” (native camera access if possible) or “Upload Photo” (desktop file picker).
+	•	After user selects or captures an image, generate a UUID on the client for the crumb read. You will see there was a /src/context/Chat component that did something similar in the old AI parenting chat app, may be a guide.
+	•	Call the API Route (/api/crumb) with the image and the client-generated UUID.
+	•	Redirect user to the resulting page at /crumbs/{uuid} to view the analysis once completed.
+	2.	Crumb Analysis Page: /crumbs/{uuid}
+	•	Displays the photo at the top.
+	•	Renders AI results (crumb score 1-10, markdown-formatted advice).
+	•	Provides form fields to record:
+	•	Recipe link or reference
+	•	Bake time
+	•	Approx. room temperature
+	•	Time to ferment (bulk)
+	•	Time to rise (proof)
+	•	Stretch & fold details
+	•	Free-form notes
+	•	The form can appear below the AI result (placement is flexible; consider user testing).
+	3.	History Page: /crumbs
+	•	Shows a timeline or list of past bakes.
+	•	Each item can show a thumbnail of the crumb photo, date/time, crumb score, and user-entered data.
+	•	Clicking on an item goes to /crumbs/{uuid} to view or update details.
+	4.	Navigation & Layout
+	•	Desktop/Tablet Layout:
+	•	Topbar with:
+	•	Logo on the left
+	•	Two center “tabs” or nav items:
+	1.	Crumb Reader (navigates to home or triggers the same functionality if on another page)
+	2.	Past Bakes (/crumbs)
+	•	On the right, show a Login/Signup button or user avatar + dropdown with:
+	•	Settings (placeholder, not yet built)
+	•	“Analyze Crumb” button (or an icon) which can also open the file picker/camera.
+	•	Mobile Layout:
+	•	Top:
+	•	Logo on the left
+	•	User avatar (or login) on the right
+	•	Bottom (tab bar):
+	•		1.	Crumb Reader
+	•	Center plus button “+” for immediate photo capture or file upload
+	•		2.	Past Bakes
+	•	Similar or identical pages for reading and history, but with bottom tab navigation instead of top tabs.
+
+3. Data & API Design
+
+4.1. Data Flow
+	1.	User Action: User clicks “Take Photo” or “Upload Photo” on the Home page.
+	2.	Generate UUID: The client creates a unique crumbId.
+	3.	Image Upload:
+	•	The Next.js client sends the file to our API endpoint (POST /api/crumb) with crumbId.
+	4.	OpenAI Image Analysis (via Vercel AI SDK):
+	•	We send the image to the model for structured output, e.g., using a prompt and Zod-based extraction (score, advice).
+	5.	Response:
+	•	The endpoint returns JSON:
+
+{
+  crumbId: string;
+  crumbScore: number;  // 1-10
+  crumbAdvice: string; // Markdown text
+}
+
+There is already an example of how to send an image a good system prompt. You just need to add the extraction framework which has some examples in src/services/server/ai
+
+
+	6.	Store in Database (optional at time of the call or after user confirmation):
+	•	Hasura (GraphQL) to store the result of the analysis and any user-provided fields.
+	7.	Display on /crumbs/{uuid}:
+	•	Show the image + AI result.
+	•	Allow user input for additional details, which are then saved to Hasura.
+
+4.2. API Endpoints
+
+POST /api/crumb
+	•	Request:
+	•	Body: { crumbId, imageFile }
+	•	Process:
+	•	Call OpenAI (via Vercel AI SDK) with the image.
+	•	Extract structured data with Zod.
+	•	Response:
+
+{
+  crumbId: string;
+  crumbScore: number;
+  crumbAdvice: string; // markdown
+}
+
+
+
+4.3. GraphQL Schema
+
+NOTE: Not built yet, make suggestions. Everything currently in here about graphql is for the old parenting LLM app.
+
+Note: Adjust fields/types as needed. Store the actual image either via a hosted solution (e.g., S3 or a third-party image host) and keep its URL in image_url.
+
+1. UI/UX Flow
+
+5.1. Home Page Flow
+	1.	User visits “Root” => sees minimal design with a single button: “Upload or Take Photo.”
+	2.	On click/tap => triggers file/camera.
+	3.	On successful image selection => generate crumbId on the client => call /api/crumb => navigate to /crumbs/{crumbId}.
+
+5.2. Crumbs Detail Flow (/crumbs/{uuid})
+	1.	Page loads => displays skeleton or loading spinner while waiting for AI results (if not already in DB).
+	2.	Show the image, the crumb score, and the markdown advice.
+	3.	Show form fields:
+	•	Recipe Link
+	•	Bake Time
+	•	Room Temp
+	•	Time Ferment
+	•	Time Rise
+	•	Stretch & Folds
+	•	Free Form Notes
+	•	“Save” button => triggers GraphQL mutation to store the data.
+
+5.3. Past Bakes Page (/crumbs)
+	1.	Lists all bakes for the logged-in user.
+	2.	Displays thumbnail, date/time, quick crumb score.
+	3.	Clicking an entry => goes to /crumbs/{uuid}.
+
+5.4. Navigation Bar
+	•	Desktop:
+	•	Left: Logo
+	•	Center: Tabs => “Crumb Reader” & “Past Bakes”
+	•	Right: Login/Signup OR (If logged in) user avatar + “Analyze Crumb” button
+	•	Mobile:
+	•	Top: Left = Logo, Right = User Avatar
+	•	Bottom:
+	•	Nav Button 1 => “Crumb Reader”
+	•	Center => “+” button (upload or take photo)
+	•	Nav Button 2 => “Past Bakes”
+
+6. Adaptation from Previous LLM-Based Project
+	1.	Remove Parenting-Specific Logic:
+	•	Clear out references to prior chat flows or parenting topics.
+	•	Replace them with crumb analysis-specific prompts, e.g., “Please analyze the crumb’s openness, texture, and overall look. Return a rating (1–10) and advice in short paragraphs.”
+	2.	Replace Chat Components:
+	•	Remove chat input box.
+	•	Replace with a single “Upload Photo” action and an “Analyze” button or auto-analyze on upload.
+	3.	Use of Zod:
+	•	Ensure the existing zod schema is updated to parse crumbScore as a number and crumbAdvice as a string (markdown).
+	•	Example:
+
+const crumbAnalysisSchema = z.object({
+  crumbScore: z.number().min(1).max(10),
+  crumbAdvice: z.string(),
+});
+
+
+	4.	UI Components:
+	•	Reuse or remove chat UI components.
+	•	Use new components for the crumb analysis result.
+	5.	Topbar to Tab Layout:
+	•	The parenting app may have had a sidebar. Convert it to the topbar (desktop) and bottom tab bar (mobile).
+
+7. Security & Authentication
+	•	Users should be able to log in and see their own crumb analysis history.
+	•	If not logged in, they can still do a single crumb analysis, but it won’t be saved in Past Bakes (optionally allow guest usage or require sign-up from the start).
+	•	Store user info via Hasura relationships (user_id in the crumbs table).
+	•	Restrict crumbs queries to only the authenticated user’s records.
+
+8. Future Enhancements (Nice-to-Have)
+	1.	Multiple Images per Bake: front, crumb shot, etc.
+	2.	Detailed AI Suggestions: use better language prompting to analyze hydration level, crumb structure, potential mistakes (underproofed, overproofed, etc.).
+	3.	Recipes Page: structured storage of recipe steps, linking multiple bakes to a single recipe.
+	4.	Social Sharing: let users share crumb photos with a public link.
+	5.	Push Notifications: (e.g., “Your crumb analysis is ready!”).
+
+9.  Conclusion
+
+The Sourdough AI Crumb Reader is a lightweight application focusing on quick crumb evaluation and user-friendly storage of bake histories. By adapting the existing LLM-based chat structure and reusing the same Next.js + Hasura approach, the build can be rapidly prototyped and expanded to more advanced features in the future.
+
+End of Document
