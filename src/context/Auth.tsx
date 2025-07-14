@@ -7,6 +7,7 @@ import { AuthState } from '@/constants/auth';
 import { GetViewerByIdQuery, useGetViewerByIdQuery } from '@/types/generated/client/hooks';
 import { identify } from '@/services/client/analytics';
 import { createClient } from '@/services/client/supabase';
+import { IS_MOCK } from '@/constants/config';
 
 interface AuthContextType {
   userId?: string | null;
@@ -62,6 +63,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   });
 
   useEffect(() => {
+    // Skip Supabase auth in mock mode
+    if (IS_MOCK) {
+      setUser(null);
+      setIsLoading(false);
+      return;
+    }
+    
     const supabase = createClient();
 
     // Check active sessions and sets the user

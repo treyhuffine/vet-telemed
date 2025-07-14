@@ -1,5 +1,6 @@
 import { createServerClient, serializeCookieHeader } from '@supabase/ssr';
 import { type NextApiRequest, type NextApiResponse } from 'next';
+import { IS_MOCK } from '@/constants/config';
 
 // Extract authorization token from request headers
 export const getAuthHeader = (req: NextApiRequest): string | undefined => {
@@ -11,6 +12,22 @@ export const getAuthHeader = (req: NextApiRequest): string | undefined => {
 };
 
 export function createClient(req: NextApiRequest, res: NextApiResponse, token?: string) {
+  if (IS_MOCK) {
+    // Return a mock client for serverless functions
+    return {
+      auth: {
+        getUser: async () => ({ data: { user: null }, error: null }),
+        getSession: async () => ({ data: { session: null }, error: null }),
+      },
+      from: () => ({
+        select: () => ({ data: [], error: null }),
+        insert: () => ({ data: null, error: null }),
+        update: () => ({ data: null, error: null }),
+        delete: () => ({ data: null, error: null }),
+      }),
+    } as any;
+  }
+  
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,

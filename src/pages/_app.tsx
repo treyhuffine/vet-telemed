@@ -6,8 +6,11 @@ import Script from 'next/script';
 import { APP_VIEWPORT, WEB_VIEWPORT } from '@/constants/app';
 import { APP_CONFIG } from '@/constants/config';
 import { getIsNativePlatform } from '@/lib/client/mobile';
+import NotificationProvider from '@/components/NotificationProvider/NotificationProvider';
+import ServiceWorkerUpdate from '@/components/ServiceWorkerUpdate/ServiceWorkerUpdate';
 import { Providers } from '@/components/utils/Providers';
 import { StagingMobileAppOverlay } from '@/components/utils/StagingMobileAppOverlay';
+// import { offlineSync } from '@/services/client/offline/sync';
 import '@/styles/globals.css';
 
 const GTAG = process.env.GOOGLE_ANALYTICS_ID;
@@ -53,6 +56,30 @@ export default function App({ Component, pageProps }: AppProps) {
       }
     };
     initConsole();
+
+    // Register service worker - DISABLED for development
+    // Unregister any existing service workers
+    // if ('serviceWorker' in navigator) {
+    //   navigator.serviceWorker.getRegistrations().then((registrations) => {
+    //     registrations.forEach((registration) => {
+    //       registration.unregister();
+    //       console.log('Service Worker unregistered');
+    //     });
+    //   });
+    // }
+    // if ('serviceWorker' in navigator) {
+    //   window.addEventListener('load', () => {
+    //     navigator.serviceWorker.register('/service-worker.js')
+    //       .then((registration) => {
+    //         console.log('Service Worker registered:', registration);
+    //         // Start offline sync after service worker is registered
+    //         offlineSync.startAutoSync();
+    //       })
+    //       .catch((error) => {
+    //         console.error('Service Worker registration failed:', error);
+    //       });
+    //   });
+    // }
   }, []);
 
   return (
@@ -97,6 +124,8 @@ export default function App({ Component, pageProps }: AppProps) {
         <Providers pageProps={pageProps}>
           <StagingMobileAppOverlay />
           <Component {...pageProps} />
+          <ServiceWorkerUpdate />
+          <NotificationProvider />
         </Providers>
       </div>
     </>

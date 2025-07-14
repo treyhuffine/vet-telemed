@@ -1,5 +1,6 @@
 import { createServerClient } from '@supabase/ssr';
 import { type NextRequest, type NextResponse } from 'next/server';
+import { IS_MOCK } from '@/constants/config';
 
 // Extract authorization token from request headers
 export const getAuthHeader = (request: NextRequest): string | undefined => {
@@ -11,6 +12,22 @@ export const getAuthHeader = (request: NextRequest): string | undefined => {
 };
 
 export const createClient = (request: NextRequest, response: NextResponse, token?: string) => {
+  if (IS_MOCK) {
+    // Return a mock client for edge functions
+    return {
+      auth: {
+        getUser: async () => ({ data: { user: null }, error: null }),
+        getSession: async () => ({ data: { session: null }, error: null }),
+      },
+      from: () => ({
+        select: () => ({ data: [], error: null }),
+        insert: () => ({ data: null, error: null }),
+        update: () => ({ data: null, error: null }),
+        delete: () => ({ data: null, error: null }),
+      }),
+    } as any;
+  }
+  
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,

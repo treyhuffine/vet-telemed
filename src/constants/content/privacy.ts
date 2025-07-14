@@ -1,12 +1,12 @@
-export const PRIVACY_POLICY = `# Sourdo Privacy Policy
+export const PRIVACY_POLICY = `# CHANGE_ME Privacy Policy
 
 Last updated: April 22, 2025
 
-This Privacy Policy ("Policy") explains how Dynamism LLC, dba Sourdo ("Sourdo," "we," "us," or "our") collects, uses, shares, and protects your personal information when you use our services. This includes your interactions with our mobile app, website, and any related offerings (collectively, the "Services").
+This Privacy Policy ("Policy") explains how Dynamism LLC, dba CHANGE_ME ("CHANGE_ME," "we," "us," or "our") collects, uses, shares, and protects your personal information when you use our services. This includes your interactions with our mobile app, website, and any related offerings (collectively, the "Services").
 
 **1. Scope of This Policy**
 
-This Policy applies to users of the Sourdo app, sour.do, and any other digital properties that link to this Policy. It covers information we collect through your use of the Services, communications with us, and participation in events, promotions, or feedback channels.
+This Policy applies to users of the CHANGE_ME app, CHANGE_ME, and any other digital properties that link to this Policy. It covers information we collect through your use of the Services, communications with us, and participation in events, promotions, or feedback channels.
 
 **2. Information We Collect**
 
@@ -30,7 +30,7 @@ We use your data to:
 - Provide, maintain, and improve our Services.
 - Communicate updates, newsletters, and service-related messages.
 - Conduct analytics, research, and service improvements.
-- Market Sourdo services, offers, and events (where permitted).
+- Market CHANGE_ME services, offers, and events (where permitted).
 - Prevent fraud, maintain security, and meet legal obligations.
 
 **4. Sharing Your Information**
@@ -56,7 +56,7 @@ You can:
 - Adjust browser settings to block or delete cookies.
 
 **8. Children's Information**
-We do not knowingly collect personal information from children under the age of 13. If you are a parent or guardian and believe your child has provided personal information to us, please contact us at support@sour.do to request deletion.
+We do not knowingly collect personal information from children under the age of 13. If you are a parent or guardian and believe your child has provided personal information to us, please contact us at support@dynamism.app to request deletion.
 
 **9. External Links**
 Our Services may link to third-party websites. We are not responsible for their privacy practices and encourage you to review their policies.
@@ -78,4 +78,4 @@ If you have questions or concerns about this Policy or your information, contact
 16192 Coastal Hwy.
 Lewes, DE 19958
 
-support@sour.do`;
+support@dynamism.app`;

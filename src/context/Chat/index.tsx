@@ -44,7 +44,6 @@ const MAX_FILE_SIZE_ERROR = `Files larger than ${MAX_FILE_SIZE_MB}MB are not all
 const MAX_FILES_ERROR = `You can only upload a maximum of ${MAX_FILES} files`;
 
 type ChatOptions = {
-  crumbId?: string;
   isNewChat?: boolean;
 };
 
@@ -78,8 +77,6 @@ interface ChatContextType {
   handleRemoveUploadedFile: (fileName: string) => void;
   checkAuthBeforeUpload: () => boolean;
   chatModal: ReturnType<typeof useModal>;
-  isFollowUpCrumb: boolean;
-  setIsFollowUpCrumb: (v: boolean) => void;
 }
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
@@ -138,9 +135,7 @@ export const ChatProvider = ({ children }: Props) => {
   const { openSignup, close } = useAuthDialog();
   const router = useRouter();
   const routeThreadId = router.isReady ? router.query?.chatId : undefined;
-  const routerCrumbId = router.isReady ? router.query?.crumbId : undefined;
   const chatModal = useModal();
-  const [isFollowUpCrumb, setIsFollowUpCrumb] = useState(true);
   const [getChatThreadById, { data: threadData, loading: isLoadingThread, called: isCalled }] =
     useGetChatThreadByIdLazyQuery({
       fetchPolicy: 'network-only',
@@ -199,7 +194,7 @@ export const ChatProvider = ({ children }: Props) => {
         loginTitle: 'Log In Required',
         loginDescription: 'You need an account to upload files.',
         signupTitle: 'Create Your Account',
-        signupDescription: 'Join Sourdo to start getting personalized sourdough advice.',
+        signupDescription: 'Join CHANGE_ME to start getting personalized CHANGE_ME advice.',
         useLinks: false,
         onSignupSuccess: async () => {
           close();
@@ -324,12 +319,7 @@ export const ChatProvider = ({ children }: Props) => {
     }
 
     if (!routeThreadId || isNewChat) {
-      router.push(
-        getChatPageUrl(
-          submitThreadId,
-          routerCrumbId && isFollowUpCrumb ? (routerCrumbId as string) : undefined,
-        ),
-      );
+      router.push(getChatPageUrl(submitThreadId));
     }
 
     let token = await getViewerToken();
@@ -345,9 +335,6 @@ export const ChatProvider = ({ children }: Props) => {
     const extraPayload: Omit<PostRequestPayloadChat, 'messages'> = {
       threadId: submitThreadId,
       files: uploadedFiles.length > 0 ? uploadedFiles : undefined,
-      ...(isFollowUpCrumb && routerCrumbId && typeof routerCrumbId === 'string'
-        ? { crumbId: routerCrumbId }
-        : {}),
     };
 
     handleApiRequestSubmit(e, {
@@ -400,8 +387,6 @@ export const ChatProvider = ({ children }: Props) => {
         handleRemoveUploadedFile,
         checkAuthBeforeUpload,
         chatModal,
-        isFollowUpCrumb,
-        setIsFollowUpCrumb,
       }}
     >
       {children}

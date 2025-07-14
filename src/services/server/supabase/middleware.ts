@@ -1,7 +1,17 @@
 import { createServerClient } from '@supabase/ssr';
 import { type NextRequest, NextResponse } from 'next/server';
+import { IS_MOCK } from '@/constants/config';
 
 export const updateSessionMiddleware = async (request: NextRequest) => {
+  // Skip Supabase session updates in mock mode
+  if (IS_MOCK) {
+    return NextResponse.next({
+      request: {
+        headers: request.headers,
+      },
+    });
+  }
+  
   // This `try/catch` block is only here for the interactive tutorial.
   // Feel free to remove once you have Supabase connected.
   try {

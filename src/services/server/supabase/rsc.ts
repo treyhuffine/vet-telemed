@@ -1,7 +1,27 @@
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
+import { IS_MOCK } from '@/constants/config';
 
 export async function createClient(token?: string) {
+  if (IS_MOCK) {
+    // Return a mock client for React Server Components
+    return {
+      auth: {
+        getUser: async () => ({ data: { user: null }, error: null }),
+        getSession: async () => ({ data: { session: null }, error: null }),
+        admin: {
+          updateUserById: async () => ({ data: { user: null }, error: null }),
+        },
+      },
+      from: () => ({
+        select: () => ({ data: [], error: null }),
+        insert: () => ({ data: null, error: null }),
+        update: () => ({ data: null, error: null }),
+        delete: () => ({ data: null, error: null }),
+      }),
+    } as any;
+  }
+  
   const cookieStore = await cookies();
 
   return createServerClient(

@@ -5,7 +5,15 @@
       "Bash(rm:*)",
       "Bash(grep:*)",
       "Bash(rg:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(pnpm install:*)",
+      "Bash(pnpm add:*)",
+      "Bash(touch:*)",
+      "Bash(pkill:*)",
+      "Bash(pnpm run build:*)",
+      "Bash(pnpm dlx shadcn@latest add:*)",
+      "Bash(pnpm run:*)"
     ],
     "deny": []
   }

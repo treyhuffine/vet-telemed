@@ -1,6 +1,6 @@
 export const metadata = {
-  title: 'Sourdo',
-  description: 'Sourdo',
+  title: 'CHANGE_ME',
+  description: 'CHANGE_ME',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

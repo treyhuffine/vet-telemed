@@ -3,7 +3,7 @@ description: A complete overview of the application and codebase
 globs: *
 alwaysApply: false
 ---
-This is a web application and mobile application via Capacitor. It is an AI chat application for parents to get advice on how to raise their children.
+This is a web application. Use clean, modern UI.
 
 ## Stack:
 
@@ -20,7 +20,7 @@ This is a web application and mobile application via Capacitor. It is an AI chat
 ## Folder Structure
 
 - `src/components` - Reusable components
-- `src/components/ui` - Shadcn UI components (our base design system)
+- `src/components/ui` - Shadcn UI components (our base design system) - DO NOT BUILD COMPONENTS IF YOU NEED A NEW ONE, YOU SHOULD INSTALL THEM.
 - `src/constants` - Where we store constant values of the app. Particularly, use `src/constants/pages` for defining URLs and paths
 - `src/context` - Store React context (global state)
 - `src/gql` - GraphQL queries that are used in multiple places in the app in the client
@@ -34,7 +34,94 @@ This is a web application and mobile application via Capacitor. It is an AI chat
 - `src/styles` - Abstractions for styles
 - `src/types` - TypeScript files
 - `src/lib` - Reusable functionality for within the application (should this be broken apart further? It can get dense.)
-- - `supabase` - Supabase functions (primarily used for signup), it will call webhooks in the app
+- `./hasurs` - Where the database schema and migrations live
+- `supabase` - Supabase functions (primarily used for signup), it will call webhooks in the app (only used for auth)
+
+Don't use getServerProps ever. Use either getStaticProps or client-side requests.
+
+Follow our patterns for the API. Define an API using its expecting method, and then combine them withHttpMethods. Use should also use the withAuthRequired/Optional methods in the server middleware, depedning on how the function is defined (serverless, edge, rsc). Use our ressponse wrappers, ex. responseJson200Success || resposne400BadRequestError
+
+Ex:
+import { NextApiResponse } from 'next';
+import { extractContentFromUrl, generateEmbedding } from '@/services/server/ai';
+import { fetchAndParseContent, isValidUrl } from '@/services/server/content-fetcher';
+import {
+  response400BadRequestError,
+  response500ServerError,
+  responseJson200Success,
+} from '@/lib/server/serverless/http';
+import {
+  NextApiRequestWithAuthRequired,
+  withAuthRequired,
+} from '@/lib/server/serverless/middleware/withAuthRequired';
+import { HttpMethods, withHttpMethods } from '@/lib/server/serverless/middleware/withHttpMethods';
+
+const POST = async (req: NextApiRequestWithAuthRequired, res: NextApiResponse) => {
+  try {
+    const { url, type = 'url', content: manualContent } = req.body;
+
+    if (!url && !manualContent) {
+      return response400BadRequestError(res, 'URL or content is required');
+    }
+
+    let contentData;
+    let extractedContent;
+
+    if (type === 'url' && url) {
+      if (!isValidUrl(url)) {
+        return response400BadRequestError(res, 'Invalid URL');
+      }
+
+      // Fetch and parse the content
+      contentData = await fetchAndParseContent(url);
+
+      // Extract learning information using AI
+      extractedContent = await extractContentFromUrl(url, contentData.textContent);
+    } else if (manualContent) {
+      // For manual content (AI discussions, etc.)
+      extractedContent = await extractContentFromUrl('', manualContent);
+    }
+
+    if (!extractedContent) {
+      return response400BadRequestError(res, 'Failed to extract content');
+    }
+
+    // Generate embeddings for the summary and concepts
+    const summaryEmbedding = await generateEmbedding(extractedContent.summary);
+    const conceptEmbeddings = await Promise.all(
+      extractedContent.concepts.map(async (concept) => ({
+        name: concept.name,
+        embedding: await generateEmbedding(`${concept.name}: ${concept.description}`),
+      })),
+    );
+
+    // TODO: Save to database using GraphQL mutation
+    // For now, return the extracted content
+    return responseJson200Success(res, {
+      success: true,
+      data: {
+        ...extractedContent,
+        url,
+        domain: url ? new URL(url).hostname : null,
+        embeddings: {
+          summary: summaryEmbedding,
+          concepts: conceptEmbeddings,
+        },
+      },
+    });
+  } catch (error) {
+    console.error('Error processing resource:', error);
+    return response500ServerError(
+      res,
+      error instanceof Error ? error.message : 'Failed to process resource',
+    );
+  }
+};
+
+export default withHttpMethods({
+  [HttpMethods.Post]: withAuthRequired(POST),
+});
+
 
 Building a page/route and general patterns used:
 
@@ -66,11 +153,11 @@ Building a page/route and general patterns used:
 
 ## APIs
 
-- Use `src/app/api` as an API gateway. All requests should flow through here.
+- Use  `src/app/api` as an API gateway. All requests should flow through here.
 - Prefer Vercel edge routes when possible as they're much faster. Note the restrictions, specifically they can't use Node-specific packages (a big one being Stripe)
 - Next.js API routes
 - For authentication in Next.js, use the middleware that wraps the route handler - `src/lib/server/middleware`
-- Next/Vercel introduced Edge routes. These use a V8 engine instead of Node. They claim that it doesn't suffer from the same cold start issue and serverless functions, so it should perform faster. We should test this claim, but it seems to make sense to use these when possible. [Vercel Edge Functions](mdc:https:/vercel.com/docs/concepts/functions/edge-functions)
+- Next/Vercel introduced Edge routes. These use a V8 engine instead of Node. They claim that it doesn't suffer from the same cold start issue and serverless functions, so it should perform faster. We should test this claim, but it seems to make sense to use these when possible. @
 
 ## Styling
 

@@ -58,7 +58,7 @@ function SettingsContent({ onClose }: SettingsContentProps) {
       <div className="mb-12">
         <h3 className="mb-2 text-lg font-bold">Appearance</h3>
         <p className="mb-4 text-sm text-muted-foreground">
-          Customize how Sourdo looks on your device
+          Customize how CHANGE_ME looks on your device
         </p>
         <div className="flex items-center gap-4">
           <span className="text-sm font-medium">Theme</span>
@@ -100,7 +100,7 @@ function SettingsContent({ onClose }: SettingsContentProps) {
         <div className="mb-12">
           <h3 className="mb-2 text-lg font-bold">Download the App</h3>
           <p className="mb-4 text-sm text-muted-foreground">
-            Get the best Sourdo experience on your device
+            Get the best CHANGE_ME experience on your device
           </p>
           <div className="flex gap-3">
             {(isWeb || isIOS) && (
@@ -119,10 +119,10 @@ function SettingsContent({ onClose }: SettingsContentProps) {
       )}
 
       <div className="mb-12">
-        <h3 className="mb-2 text-lg font-bold">About Sourdo</h3>
+        <h3 className="mb-2 text-lg font-bold">About CHANGE_ME</h3>
         <p className="mb-4 text-sm text-muted-foreground">
-          Sourdo is your parenting companion. Our AI chat is available 24/7 to answer your questions
-          and support your parenting journey.
+          CHANGE_ME is your parenting companion. Our AI chat is available 24/7 to answer your
+          questions and support your parenting journey.
         </p>
         <Link
           href={PRIVACY_PAGE_URL}

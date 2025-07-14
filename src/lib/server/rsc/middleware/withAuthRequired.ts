@@ -1,3 +1,5 @@
+import { GetViewerByIdQuery } from '@/types/generated/server';
+import { getViewerById } from '@/services/server/graphql/queries/getViewerById';
 import { getUser } from '@/services/server/supabase/rsc';
 import { response401UnauthorizedError } from '@/lib/server/rsc/http';
 
@@ -5,6 +7,7 @@ type TokenValidationResponse = Awaited<ReturnType<typeof getUser>>;
 
 export type RequestWithAuth = Request & {
   auth: TokenValidationResponse;
+  viewer: NonNullable<GetViewerByIdQuery['usersByPk']>;
 };
 
 // Extract authorization token from Request object
@@ -35,6 +38,16 @@ export const withAuthRequired = (handler: (request: RequestWithAuth) => Promise<
       }
 
       (request as RequestWithAuth).auth = auth;
+
+      const viewer = await getViewerById({
+        id: auth.data.user.id,
+      });
+
+      if (!viewer) {
+        return response401UnauthorizedError('You must be logged in');
+      }
+
+      (request as RequestWithAuth).viewer = viewer;
 
       return handler(request as RequestWithAuth);
     } catch (error) {

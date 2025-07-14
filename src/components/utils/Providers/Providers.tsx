@@ -9,7 +9,8 @@ import { AuthProvider } from '@/context/Auth';
 import { AuthDialogProvider } from '@/context/AuthDialog';
 import { ChatProvider } from '@/context/Chat';
 import { ThemeProvider } from '@/context/NextThemeProvider';
-import { ChatModal } from '@/components/ChatModal';
+import { VetAuthProvider } from '@/context/VetAuth';
+import { DemoDataProvider } from '@/context/DemoData';
 import { AuthDialog } from '@/components/auth';
 import { Toaster } from '@/components/ui/sonner';
 
@@ -98,23 +99,26 @@ export function Providers({ children, pageProps = {} }: Props) {
   return (
     <ApolloProvider client={apolloClient}>
       <AuthProvider>
-        <AuthDialogProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <PostHogProvider client={posthog}>
-              <ChatProvider>
-                {children}
-                <ToasterWithOffset />
-                <AuthDialog />
-                <ChatModal />
-              </ChatProvider>
-            </PostHogProvider>
-          </ThemeProvider>
-        </AuthDialogProvider>
+        <VetAuthProvider>
+          <DemoDataProvider>
+            <AuthDialogProvider>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+              >
+                <PostHogProvider client={posthog}>
+                  <ChatProvider>
+                    {children}
+                    <ToasterWithOffset />
+                    <AuthDialog />
+                  </ChatProvider>
+                </PostHogProvider>
+              </ThemeProvider>
+            </AuthDialogProvider>
+          </DemoDataProvider>
+        </VetAuthProvider>
       </AuthProvider>
     </ApolloProvider>
   );

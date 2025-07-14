@@ -16,9 +16,9 @@ export const DELETE = withViewerRequired(async (request: RequestWithViewer) => {
   const response = await resend.emails.send({
     from: 'onboarding@resend.dev',
     /**
-     * @todo MAKE SOURDO ALIAS and change to support@sour.do
+     * @todo MAKE CHANGE_ME ALIAS and change to support@dynamism.app
      */
-    to: 'accounts@sour.do',
+    to: 'accounts@dynamism.app',
     subject: 'Account Deletion Request',
     text: `User ID: ${userId}\nName: ${viewer?.name}\nEmail: ${viewer?.email}`,
   });

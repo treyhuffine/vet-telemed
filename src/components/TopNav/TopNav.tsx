@@ -11,10 +11,9 @@ import { Button } from '@/components/ui/button';
 
 const AUTH_DIALOG_OPTIONS = {
   loginTitle: 'Log In',
-  loginDescription: 'Welcome to Sourdo.',
+  loginDescription: 'Welcome to CHANGE_ME.',
   signupTitle: 'Create Your Account',
-  signupDescription:
-    'Join Sourdo to get AI crumb readings, track your bakes, and get advice on your sourdough journey.',
+  signupDescription: 'Join CHANGE_ME to...',
 };
 
 export function TopNav() {

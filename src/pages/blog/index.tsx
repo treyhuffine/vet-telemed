@@ -57,10 +57,10 @@ export default function BlogPage({ posts }: BlogPageProps) {
         <div className="pt-24">
           <div className="container mx-auto max-w-7xl px-8">
             <h1 className="mb-4 text-4xl font-bold tracking-tight sm:text-5xl">
-              Sourdough Insights
+              CHANGE_ME Insights
             </h1>
             <p className="text-xl text-muted-foreground">
-              Expert advice and stories to help you navigate your sourdough journey.
+              Expert advice and stories to help you navigate your CHANGE_ME journey.
             </p>
           </div>
         </div>

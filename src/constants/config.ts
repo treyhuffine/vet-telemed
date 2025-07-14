@@ -3,6 +3,8 @@
  * Update these values to customize your application.
  */
 
+export const IS_MOCK = true;
+
 // =======================
 // App Information
 // =======================
@@ -11,15 +13,15 @@ export const APP_CONFIG = {
   name: 'YourApp',
   tagline: 'Your tagline here',
   description: 'Your app description for SEO',
-  
+
   // Email addresses
   publicEmail: 'hello@example.com',
   supportEmail: 'support@example.com',
-  
+
   // App store links (leave empty if not applicable)
   iosAppStoreLink: '',
   androidPlayStoreLink: '',
-  
+
   // Social media links (optional)
   social: {
     twitter: '',
@@ -38,20 +40,20 @@ export const THEME_CONFIG = {
     body: 'Inter',
     title: 'Poppins',
   },
-  
+
   // Brand colors (update CSS variables in globals.css)
   colors: {
     // Primary brand color
     primary: '#3b82f6', // Blue as default
     // Add more brand colors as needed
   },
-  
+
   // Logo paths
   logo: {
     main: '/logo.png',
     full: '/logo-full.png',
   },
-  
+
   // Default border radius
   borderRadius: '0.5rem',
 };
@@ -64,7 +66,7 @@ export const SEO_CONFIG = {
   defaultTitle: APP_CONFIG.name,
   titleTemplate: `%s | ${APP_CONFIG.name}`,
   defaultDescription: APP_CONFIG.description,
-  
+
   // Open Graph
   openGraph: {
     type: 'website',
@@ -72,7 +74,7 @@ export const SEO_CONFIG = {
     site_name: APP_CONFIG.name,
     defaultImage: '/og.png',
   },
-  
+
   // Twitter
   twitter: {
     handle: '@yourhandle',
@@ -93,19 +95,19 @@ export const FEATURES = {
     enableEmailPassword: false,
     enableSocialLogin: false,
   },
-  
+
   // Payment features
   payments: {
     enabled: false,
     provider: 'stripe' as 'stripe' | 'paddle' | 'lemonsqueezy',
   },
-  
+
   // Analytics
   analytics: {
     posthog: true,
     googleAnalytics: true,
   },
-  
+
   // Other features
   blog: false,
   chat: false,
@@ -132,7 +134,7 @@ export const FILE_UPLOAD_CONFIG = {
 export const API_CONFIG = {
   // API timeouts
   timeout: 30000, // 30 seconds
-  
+
   // Rate limiting
   rateLimiting: {
     enabled: true,
@@ -148,7 +150,7 @@ export const MOBILE_CONFIG = {
   // Viewports
   appViewport: 'viewport-fit=cover, width=device-width, initial-scale=1, maximum-scale=1',
   webViewport: 'width=device-width, initial-scale=1',
-  
+
   // Deep linking
   deepLinkScheme: 'yourapp://',
   universalLinkDomain: 'yourapp.com',
@@ -173,8 +175,7 @@ export const SERVICES_CONFIG = {
 // =======================
 // Helper Functions
 // =======================
-export const generateBrandTitle = (title?: string) => 
+export const generateBrandTitle = (title?: string) =>
   title ? `${title} | ${APP_CONFIG.name}` : APP_CONFIG.name;
 
-export const getDataSecurityDescription = () => 
-  '🔒 All data is protected by bank-level security.';
+export const getDataSecurityDescription = () => '🔒 All data is protected by bank-level security.';

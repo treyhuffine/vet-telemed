@@ -4,9 +4,9 @@ const config: CodegenConfig = {
   overwrite: true,
   watch: true,
   schema: {
-    ['https://staging-graphql-sourdo.onrender.com/v1/graphql']: {
+    ['http://localhost:8080/v1/graphql']: {
       headers: {
-        'x-hasura-admin-secret': 'ppvjdgYmGgNKR_cAL@U!D3mYrY_XpwEhmaEa@Jf@UwcDwiQs',
+        'x-hasura-admin-secret': '',
       },
     },
   },

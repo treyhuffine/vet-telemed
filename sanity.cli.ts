@@ -10,4 +10,4 @@ const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET;
 console.log('projectId', projectId);
 console.log('dataset', dataset);
 
-export default defineCliConfig({ api: { projectId, dataset }, studioHost: 'sourdo' });
+export default defineCliConfig({ api: { projectId, dataset }, studioHost: '' });

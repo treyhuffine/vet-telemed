@@ -10,7 +10,6 @@ export enum AiModel {
 
 export const DEFAULT_CHAT_MODEL = AiModel.Cheap;
 export const DEFAULT_TITLE_MODEL = AiModel.Nano;
-export const DEFAULT_CRUMB_READ_MODEL = AiModel.Cheap;
 
 export type Role = Message['role'];
 

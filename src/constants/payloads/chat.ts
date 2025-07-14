@@ -3,7 +3,6 @@ import { Message } from 'ai';
 export type PostRequestPayload = {
   messages: Message[];
   threadId: string;
-  crumbId?: string;
   files?: {
     originalName: string;
     fileName: string;

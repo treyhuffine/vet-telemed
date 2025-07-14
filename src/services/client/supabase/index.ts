@@ -5,10 +5,49 @@ import {
   VerifyEmailOtpParams,
   createClient as createBrowserClient,
 } from '@supabase/supabase-js';
+import { IS_MOCK } from '@/constants/config';
 
 type CreateClient = SupabaseClient<any, 'public', any>;
 let browserClient: CreateClient | undefined;
+
+// Mock client for when IS_MOCK is true
+const createMockClient = (): any => {
+  return {
+    auth: {
+      signInWithOtp: async () => ({ data: { user: null }, error: null }),
+      verifyOtp: async () => ({ data: { user: null, session: null }, error: null }),
+      signUp: async () => ({ data: { user: null, session: null }, error: null }),
+      signInWithPassword: async () => ({ data: { user: null, session: null }, error: null }),
+      signOut: async () => ({ error: null }),
+      resetPasswordForEmail: async () => ({ data: null, error: null }),
+      updateUser: async () => ({ data: { user: null }, error: null }),
+      getSession: async () => ({ data: { session: null }, error: null }),
+      refreshSession: async () => ({ data: { session: null }, error: null }),
+      signInWithOAuth: async () => ({ data: { provider: null, url: null }, error: null }),
+      onAuthStateChange: (callback: any) => {
+        // Return a mock subscription object
+        return {
+          data: {
+            subscription: {
+              unsubscribe: () => {},
+            },
+          },
+        };
+      },
+    },
+    from: () => ({
+      select: () => ({ data: [], error: null }),
+      insert: () => ({ data: null, error: null }),
+      update: () => ({ data: null, error: null }),
+      delete: () => ({ data: null, error: null }),
+    }),
+  };
+};
+
 export const createClient: () => CreateClient = () => {
+  if (IS_MOCK) {
+    return createMockClient() as CreateClient;
+  }
   if (process.env.TARGET_PLATFORM === 'mobile') {
     if (browserClient) {
       return browserClient;
@@ -59,10 +98,6 @@ export const PASSWORD_AUTH_EMAILS = [
   'android-reviewer@dynamism.app',
   'reviewer+apple@dynamism.app',
   'reviewer+android@dynamism.app',
-  'apple-reviewer@sour.do',
-  'android-reviewer@sour.do',
-  'reviewer+apple@sour.do',
-  'reviewer+android@sour.do',
 ];
 
 // Utility to check if an email should use password authentication
@@ -71,6 +106,9 @@ export const isPasswordAccount = (email: string): boolean => {
 };
 
 export const signInWithOtp = async (email: string) => {
+  if (IS_MOCK) {
+    return { data: { user: null }, error: null };
+  }
   const client = createClient();
   return client.auth.signInWithOtp({
     email,
@@ -86,6 +124,9 @@ export const signInWithOtp = async (email: string) => {
 };
 
 export async function verifyOtpEmail({ token, email }: Omit<VerifyEmailOtpParams, 'type'>) {
+  if (IS_MOCK) {
+    return { data: { user: null, session: null }, error: null };
+  }
   const supabase = createClient();
   return supabase.auth.verifyOtp({
     email,
@@ -141,6 +182,9 @@ export async function verifyOtpEmail({ token, email }: Omit<VerifyEmailOtpParams
 //   "session": null
 // }
 export const signUpWithPassword = async (email: string, password: string) => {
+  if (IS_MOCK) {
+    return { data: { user: null, session: null }, error: null };
+  }
   const client = createClient();
   const { data, error } = await client.auth.signUp({
     email,
@@ -157,6 +201,9 @@ export const signUpWithPassword = async (email: string, password: string) => {
 };
 
 export const logInWithPassword = async (email: string, password: string) => {
+  if (IS_MOCK) {
+    return { data: { user: null, session: null }, error: null };
+  }
   const client = createClient();
   // First check if user exists, if not create it
   const { data: userCheckData, error: checkError } = await client.auth.signInWithPassword({
@@ -177,16 +224,25 @@ export const logInWithPassword = async (email: string, password: string) => {
 };
 
 export const signOut = async () => {
+  if (IS_MOCK) {
+    return { error: null };
+  }
   const client = createClient();
   return client.auth.signOut();
 };
 
 export const resetPassword = async (email: string) => {
+  if (IS_MOCK) {
+    return { data: null, error: null };
+  }
   const client = createClient();
   return client.auth.resetPasswordForEmail(email);
 };
 
 export const updatePassword = async (newPassword: string) => {
+  if (IS_MOCK) {
+    return { data: { user: null }, error: null };
+  }
   const client = createClient();
   return client.auth.updateUser({
     password: newPassword,
@@ -194,6 +250,9 @@ export const updatePassword = async (newPassword: string) => {
 };
 
 export const getViewerToken = async () => {
+  if (IS_MOCK) {
+    return null;
+  }
   const client = createClient();
   const {
     data: { session },
@@ -230,6 +289,9 @@ const PROVIDER_SCOPES = {
 
 // Base OAuth function (can be made private by removing export)
 export const signInWithOAuth = async (provider: AuthProvider) => {
+  if (IS_MOCK) {
+    return { data: { provider: null, url: null }, error: null };
+  }
   const client = createClient();
   return client.auth.signInWithOAuth({
     provider,

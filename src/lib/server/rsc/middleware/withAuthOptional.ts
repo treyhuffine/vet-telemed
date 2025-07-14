@@ -1,9 +1,12 @@
+import { GetViewerByIdQuery } from '@/types/generated/server';
+import { getViewerById } from '@/services/server/graphql/queries/getViewerById';
 import { getUser } from '@/services/server/supabase/rsc';
 
 type TokenValidationResponse = Awaited<ReturnType<typeof getUser>>;
 
 export type RequestWithAuthOptional = Request & {
   auth: TokenValidationResponse | null;
+  viewer?: GetViewerByIdQuery['usersByPk'];
 };
 
 // Extract authorization token from Request object
@@ -32,6 +35,14 @@ export const withAuthOptional = (
       }
 
       (request as RequestWithAuthOptional).auth = auth;
+
+      if (auth?.data?.user) {
+        const viewer = await getViewerById({
+          id: auth.data.user.id,
+        });
+
+        (request as RequestWithAuthOptional).viewer = viewer;
+      }
     } catch (error) {
       // Ignore: this could fail but the auth is optional
       console.error('Authentication error (optional):', error);

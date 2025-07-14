@@ -3,10 +3,16 @@ import { NextRequest } from 'next/server';
 import { insertNewUser } from '@/services/server/graphql/mutations/insertNewUser';
 import { updateCreatedAccountMetadata } from '@/services/server/supabase/rsc';
 import { response400BadRequestError, response403ForbiddenError } from '@/lib/server/rsc/http';
+import { IS_MOCK } from '@/constants/config';
 
 export const runtime = 'edge';
 
 export async function POST(req: NextRequest) {
+  // Skip webhook processing in mock mode
+  if (IS_MOCK) {
+    return new Response('Mock mode - webhook skipped', { status: 200 });
+  }
+  
   const payload = await req.json();
   const { type, record, table } = payload;
 
